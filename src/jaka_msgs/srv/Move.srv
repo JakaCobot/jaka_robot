@@ -1,0 +1,14 @@
+float32[] pose
+bool has_ref
+float32[] ref_joint
+float32 mvvelo
+float32 mvacc
+float32 mvtime
+float32 mvradii
+int16 coord_mode
+int16 index
+
+---
+
+int16 ret
+string message

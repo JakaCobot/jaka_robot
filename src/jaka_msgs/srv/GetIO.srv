@@ -1,0 +1,9 @@
+string signal
+int16 path
+int16 type
+int16 index
+
+---
+
+float32 value
+string message

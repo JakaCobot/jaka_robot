@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <param name="robot_description" textfile="$(find jaka_description)/urdf/jaka_zu12.urdf" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+    <remap from="/joint_states" to="robot_jog_command"/>
+  </node>
+
+  <node name="jaka_jog_panel" pkg="jaka_jog_panel" type="jakajogpanel" />
+
+  <node name="rviz" pkg="rviz" type="rviz" 
+    args="-d $(find jaka_description)/config/jaka_zu12_urdf.rviz"
+    required="true" />
+
+</launch>
