@@ -1,0 +1,4 @@
+<launch>
+	<param name="ip" value="$(arg ip)" type="str"/>
+	<node pkg="jaka_driver" type="jaka_driver" name="jaka_driver" output="screen"/>
+</launch>

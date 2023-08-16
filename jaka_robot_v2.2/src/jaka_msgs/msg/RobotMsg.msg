@@ -1,0 +1,4 @@
+int16 motion_state
+int16 power_state
+int16 servo_state
+int16 collision_state

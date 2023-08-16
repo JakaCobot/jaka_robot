@@ -1,0 +1,6 @@
+float32[]  joint
+
+---
+
+float32[] cartesian_pose
+string message
