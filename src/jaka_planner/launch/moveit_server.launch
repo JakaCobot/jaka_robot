@@ -1,4 +1,0 @@
-<launch>
-	<param name="ip" value="172.30.0.180" type="str"/>
-	<node pkg="jaka_planner" type="moveit_server" name="moveit_server" output="screen" />
-</launch>

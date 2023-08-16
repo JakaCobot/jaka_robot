@@ -1,7 +1,0 @@
-float32[] ref_joint
-float32[] cartesian_pose
-
----
-
-float32[] joint
-string message
