@@ -49,6 +49,7 @@ bool jointStates(JointValue joint_pose)
     {
         bool ret = joint_pose.jVal[i] * 180 / PI - 0.2 < robotstatus.joint_position[i] * 180 / PI
         && robotstatus.joint_position[i] * 180 / PI < joint_pose.jVal[i] * 180 / PI + 0.2;
+        joint_state = joint_state && ret; 
     }
     cout << "Whether the robot has reached the target position: " << joint_state << endl;       //1到达；0未到达
     return joint_state;
