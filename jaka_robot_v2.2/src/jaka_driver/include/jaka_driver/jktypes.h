@@ -266,13 +266,14 @@ typedef struct
 	double acc;			 ///< 执行脚本运行加速度
 } TrajTrackPara;
 
+#define MaxLength  256
 /**
 * @brief 多个字符串存储数据类型
 */
 typedef struct
 {
 	int len;			 ///< 字符串个数
-	char name[128][128]; ///< 数据存储二维数组
+	char name[MaxLength][MaxLength]; ///< 数据存储二维数组
 } MultStrStorType;
 
 /**

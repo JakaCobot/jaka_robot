@@ -433,25 +433,11 @@ public:
 	errno_t get_tcp_position(CartesianPose *tcp_position);
 
 	/**
-	* @brief 获取当前设置下工具末端的位姿
-	* @param tcp_position 工具末端位置查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_tcp_position_actual(CartesianPose *tcp_position);
-
-	/**
 	* @brief 获取当前机器人关节角度
 	* @param joint_position 关节角度查询结果
 	* @return ERR_SUCC 成功 其他失败
 	*/
 	errno_t get_joint_position(JointValue *joint_position);
-
-	/**
-	* @brief 获取当前机器人关节角度
-	* @param joint_position 关节角度查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_joint_position_actual(JointValue *joint_position);
 
 	/**
 	* @brief 查询机器人是否处于碰撞保护模式
@@ -746,7 +732,7 @@ public:
 	* @param filepath SDK日志路径
 	* @return ERR_SUCC 成功 其他失败
 	*/
-	errno_t set_SDK_filepath(char *filepath);
+	errno_t set_SDK_filepath(const char *filepath);
 
 	/**
 	* @brief 同set_SDK_filepath
@@ -957,6 +943,22 @@ public:
 	errno_t get_dh_param(DHParam* dh_param);
 
 	/**
+	* @brief 设置安装角度
+	* @param angleX 绕X轴旋转角度
+	* @param angleZ 绕Z轴旋转角度
+	* @return ERR_SUCC 成功 其他失败
+	*/
+	errno_t set_installation_angle(double angleX, double angleZ);
+
+	/**
+	* @brief 获取安装角度
+	* @param quat 安装角度四元数
+	* @param appang 安装角度RPY角
+	* @return ERR_SUCC 成功 其他失败
+	*/
+	errno_t get_installation_angle(Quaternion* quat, Rpy* appang);
+
+	/**
 	* @brief 设置tioV3电压参数
 	* @param vout_enable 电压使能，0:关，1开
 	* @param vout_vol 电压大小 0:24v 1:12v
@@ -999,7 +1001,7 @@ public:
 	* @param SignInfo* 信号量信息数组
 	* @return ERR_SUCC 成功 其他失败
 	*/
-	errno_t get_rs485_signal_info(SignInfo* sign_info_array, size_t* array_len);
+	errno_t get_rs485_signal_info(SignInfo* sign_info_array, int* array_len);
 
 	/**
 	* @brief 设置tio模式

@@ -20,4 +20,6 @@
 #define ERR_CANNOT_OPEN_FILE     -11            //无法打开文件，文件不存在
 #define ERR_MOTION_ABNORMAL      -12            //运动过程中发生异常
 #define ERR_FTP_PREFROM			 -14            //ftp异常
+#define ERR_VALUE_OVERSIZE       -15            // socket msg or value oversize
+
 #endif
