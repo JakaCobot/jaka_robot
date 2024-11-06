@@ -848,8 +848,9 @@ int main(int argc, char *argv[])
     robot.set_status_data_update_time_interval(100);
     robot.set_block_wait_timeout(120);
     robot.power_on();
-    sleep(1);
+    sleep(8);
     robot.enable_robot();
+    sleep(4);
     //Joint-space first-order low-pass filtering in robot servo mode
     //robot.servo_move_use_joint_LPF(2);
     robot.servo_speed_foresight(15,0.03);

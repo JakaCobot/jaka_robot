@@ -1,0 +1,5 @@
+<launch>
+	<param name="ip" value="$(arg ip)" type="str"/>
+	<param name="model" value="$(arg model)" type="str"/>
+	<node pkg="jaka_planner" type="moveit_server" name="moveit_server" output="screen" />
+</launch>
