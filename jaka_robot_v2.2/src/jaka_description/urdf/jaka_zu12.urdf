@@ -297,7 +297,7 @@
     <parent link="Link_0" />
     <child link="Link_1" />
     <axis xyz="0 0 1" />
-    <limit lower="-6.28" upper="6.28" effort="2000" velocity="1.57" />
+    <limit lower="-6.28" upper="6.28" effort="2000" velocity="2.09" />
   </joint>
   
   <joint name="joint_2" type="continuous">
@@ -305,7 +305,7 @@
     <parent link="Link_1" />
     <child link="Link_2" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.48" upper="4.62" effort="8000" velocity="1.57" />  
+    <limit lower="-1.48" upper="4.62" effort="8000" velocity="2.09" />  
   </joint>
 
   <joint name="joint_3" type="continuous">
@@ -313,7 +313,7 @@
     <parent link="Link_2" />
     <child link="Link_3" />
     <axis xyz="0 0 1" />
-    <limit lower="-3.05" upper="3.05" effort="8000" velocity="1.57" />
+    <limit lower="-3.05" upper="3.05" effort="8000" velocity="2.09" />
   </joint>
 
   <joint name="joint_4" type="continuous">
@@ -321,7 +321,7 @@
     <parent link="Link_3" />
     <child link="Link_4" />
     <axis xyz="0 0 1" />
-    <limit lower="-1.48" upper="4.62" effort="2000" velocity="1.57" />
+    <limit lower="-1.48" upper="4.62" effort="2000" velocity="3.14" />
   </joint>
 
   <joint name="joint_5" type="continuous">
@@ -329,7 +329,7 @@
     <parent link="Link_4" />
     <child link="Link_5" />
     <axis xyz="0 0 1" />
-    <limit lower="-6.28" upper="6.28" effort="3000" velocity="1.57" />
+    <limit lower="-6.28" upper="6.28" effort="3000" velocity="3.14" />
   </joint>
 
   <joint name="joint_6" type="continuous">
@@ -337,7 +337,7 @@
     <parent link="Link_5" />
     <child link="Link_6" />
     <axis xyz="0 0 1" />
-    <limit lower="-6.28" upper="6.28" effort="1000" velocity="1.57" />
+    <limit lower="-6.28" upper="6.28" effort="1000" velocity="3.14" />
   </joint>
 
   <transmission name="trans_joint_1">

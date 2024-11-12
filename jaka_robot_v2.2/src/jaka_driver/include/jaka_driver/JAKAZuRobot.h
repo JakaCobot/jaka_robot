@@ -156,9 +156,11 @@ public:
 	* @param acc 机器人直线运动加速度,单位mm/s^2
 	* @param tol 机器人关节运动终点误差，单位mm
 	* @param option_cond 机器人关节可选参数，如果不需要，该值可不赋值,填入空指针就可
+	* @param ori_vel 姿态速度,单位rad/s
+	* @param ori_acc 姿态加速度,单位rad/s^2
 	* @return ERR_SUCC 成功 其他失败
 	*/
-	errno_t linear_move(const CartesianPose *end_pos, MoveMode move_mode, BOOL is_block, double speed, double accel, double tol, const OptionalCond *option_cond);
+	errno_t linear_move(const CartesianPose *end_pos, MoveMode move_mode, BOOL is_block, double speed, double accel, double tol, const OptionalCond *option_cond, double ori_vel=3.14, double ori_acc=12.56);
 
 	/**
 	* @brief 机器人末端圆弧运动
@@ -170,9 +172,15 @@ public:
 	* @param acc 机器人圆弧运动加速度，单位：rad/s^2
 	* @param tol 机器人圆弧运动终点误差, 单位mm
 	* @param option_cond 机器人关节可选参数，如果不需要，该值可不赋值,填入空指针就可
+	* @param circle_cnt 指定机器人圆弧运动圈数。为0时等价于circular_move
+	* @param circle_mode 指定机器人圆弧运动模式，参数解释如下：
+	- 0：固定采用起始姿态到终止姿态旋转角度小于180°的轴角进行姿态变化；(当前方案)
+	- 1：固定采用起始姿态到终止姿态旋转角度大于180°的轴角进行姿态变化；
+	- 2：根据中间点姿态自动选择选择角度小于180°还是大于180°；
+	- 3： 姿态夹角与圆弧轴线始终保持一致。(当前整圆运动)
 	* @return ERR_SUCC 成功 其他失败
 	*/
-	errno_t circular_move(const CartesianPose *end_pos, const CartesianPose *mid_pos, MoveMode move_mode, BOOL is_block, double speed, double accel, double tol, const OptionalCond *option_cond, int circle_cnt = 0);
+	errno_t circular_move(const CartesianPose *end_pos, const CartesianPose *mid_pos, MoveMode move_mode, BOOL is_block, double speed, double accel, double tol, const OptionalCond *option_cond, int circle_cnt = 0, int circle_mode = 0);
 
 	/**
 	* @brief 机器人SERVO MOVE模式使能
@@ -501,6 +509,14 @@ public:
 	*/
 	errno_t get_collision_level(int *level);
 
+	// /**
+	// * @brief 
+	// * @param 
+	// * @return ERR_SUCC 成功 其他失败
+	// */
+	// errno_t set_collision_option(CollisionOption option, CollisionOptionSettingType type = CollisionOptionSettingType::CollitionOption_ReboundAngle);
+
+
 	/**
 	* @brief 计算指定位姿在当前工具、当前安装角度以及当前用户坐标系设置下的逆解
 	* @param ref_pos 逆解计算用的参考关节空间位置
@@ -726,6 +742,22 @@ public:
 	* @return ERR_SUCC 成功 其他失败
 	*/
 	errno_t servo_speed_foresight(int max_buf, double kp);
+
+	/**
+	* @brief get SDK log path
+	* @param path path of SDK log
+	* @param size size of char* buffer
+	* @return error code 
+	*/
+	static errno_t static_Get_SDK_filepath(char* path, int size);
+
+	/**
+	* @brief get SDK log path
+	* @param path path of SDK log
+	* @param size size of char* buffer
+	* @return error code 
+	*/
+	errno_t get_SDK_filepath(char* path, int size);
 
 	/**
 	* @brief 设置SDK日志路径

@@ -105,7 +105,7 @@
       lower="-6.28"
       upper="6.28"
       effort="2000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
   <link
     name="Link_2">
@@ -163,7 +163,7 @@
       lower="-1.48"
       upper="4.62"
       effort="8000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
   <link
     name="Link_3">
@@ -221,7 +221,7 @@
       lower="-3.05"
       upper="3.05"
       effort="8000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
   <link
     name="Link_4">
@@ -279,7 +279,7 @@
       lower="-1.48"
       upper="4.62"
       effort="2000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
   <link
     name="Link_5">
@@ -337,7 +337,7 @@
       lower="-6.28"
       upper="6.28"
       effort="3000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
   <link
     name="Link_6">
@@ -395,7 +395,7 @@
       lower="-6.28"
       upper="6.28"
       effort="1000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
 
 

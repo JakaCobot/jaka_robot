@@ -111,7 +111,7 @@
       lower="-6.28"
       upper="6.28"
       effort="2000"
-      velocity="1.57" />
+      velocity="3.665" />
   </joint>
   <link
     name="J2">
@@ -167,9 +167,9 @@
       xyz="0 0 1" />
     <limit
       lower="-1.48"
-      upper="4.62"
+      upper="4.628"
       effort="5000"
-      velocity="1.57" />
+      velocity="3.665" />
   </joint>
   <link
     name="J3">
@@ -227,7 +227,7 @@
       lower="-3.05"
       upper="3.05"
       effort="5000"
-      velocity="1.57" />
+      velocity="3.665" />
   </joint>
   <link
     name="J4">
@@ -285,7 +285,7 @@
       lower="-1.48"
       upper="4.62"
       effort="2000"
-      velocity="1.57" />
+      velocity="3.665" />
   </joint>
   <link
     name="J5">
@@ -343,7 +343,7 @@
       lower="-6.28"
       upper="6.28"
       effort="3000"
-      velocity="1.57" />
+      velocity="3.665" />
   </joint>
   <link
     name="J6">
@@ -401,7 +401,7 @@
       lower="-6.28"
       upper="6.28"
       effort="1000"
-      velocity="1.57" />
+      velocity="3.665" />
   </joint>
 
   <transmission name="trans_joint_1">

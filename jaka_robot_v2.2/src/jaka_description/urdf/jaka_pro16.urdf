@@ -311,7 +311,7 @@
       lower="-6.28"
       upper="6.28"
       effort="10000"
-      velocity="1.57" />
+      velocity="2.09" />
   </joint>
   
   <joint
@@ -330,7 +330,7 @@
       lower="-1.48"
       upper="4.62"
       effort="12000"
-      velocity="1.57" />
+      velocity="2.09" />
   </joint>
 
 <joint
@@ -349,7 +349,7 @@
       lower="-3.05"
       upper="3.05"
       effort="12000"
-      velocity="1.57" />
+      velocity="2.09" />
   </joint>
 
  <joint
@@ -368,7 +368,7 @@
       lower="-1.48"
       upper="4.62"
       effort="8000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
 
   <joint
@@ -387,7 +387,7 @@
       lower="-6.28"
       upper="6.28"
       effort="8000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
 
   <joint
@@ -406,7 +406,7 @@
       lower="-6.28"
       upper="6.28"
       effort="8000"
-      velocity="1.57" />
+      velocity="3.14" />
   </joint>
 
   <transmission name="trans_joint_1">
