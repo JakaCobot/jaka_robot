@@ -178,6 +178,7 @@
     <!-- JOINT -->
     <joint name="fixed" type="fixed">
         <parent link="world" />
+        <origin xyz="-0.002 0 -0.00001" rpy="0 0 0" />
         <child link="Link_0" />
     </joint>
 
