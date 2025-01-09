@@ -144,10 +144,20 @@ int main(int argc, char *argv[])
     ros::Duration(0.5).sleep();
     //Set filter parameter
     robot.servo_move_use_joint_LPF(0.5);
-    robot.power_on();
-    sleep(8);
-    robot.enable_robot();
-    sleep(4);
+    RobotStatus robotstatus;
+    robot.get_robot_status(&robotstatus);
+     cout << "robotstatus.powered_on:" << robotstatus.powered_on << ", " << "robotstatus.enabled:" << robotstatus.enabled << endl;
+    if (!robotstatus.powered_on)
+    {
+        robot.power_on();
+        sleep(8);
+    }
+    if (!robotstatus.enabled)
+    {
+        robot.enable_robot();
+        sleep(4);
+    }
+    
     //Create topic "/joint_states"
     ros::Publisher joint_states_pub = nh.advertise<sensor_msgs::JointState>("/joint_states", 10);
     //Create action server object

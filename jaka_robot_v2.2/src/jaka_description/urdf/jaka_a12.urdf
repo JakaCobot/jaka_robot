@@ -46,6 +46,12 @@
       </geometry>
     </collision>
   </link>
+    <!-- JOINT -->
+  <joint name="fixed" type="fixed">
+       <parent link="world"/>
+       <child link="base_link"/>
+  </joint>
+
   <link
     name="J1">
     <inertial>
@@ -393,11 +399,6 @@
       upper="6.28"
       effort="1000"
       velocity="3.67" />
-  </joint>
-  <!-- JOINT -->
-  <joint name="fixed" type="fixed">
-       <parent link="world"/>
-       <child link="base_link"/>
   </joint>
 
   <transmission name="trans_joint_1">
