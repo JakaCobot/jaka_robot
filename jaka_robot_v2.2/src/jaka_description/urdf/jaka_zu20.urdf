@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="jaka_zu20">
+
+  <link name="world" />
+
+  
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.012963 -0.00022478 0.033142"
+        rpy="0 0 0" />
+      <mass
+        value="1.8939" />
+      <inertia
+        ixx="0.0071692"
+        ixy="8.0474E-07"
+        ixz="0.0004402"
+        iyy="0.012392"
+        iyz="2.3506E-06"
+        izz="0.018321" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- JOINT -->
+  <joint name="fixed" type="fixed">
+     <origin xyz="0.005 0 0" rpy="0 0 0" />
+     <parent link="world"/>
+     <child link="base_link"/>
+  </joint>
+
+  <link
+    name="Link_01">
+    <inertial>
+      <origin
+        xyz="-8.8545E-07 0.0056159 -0.0066182"
+        rpy="0 0 0" />
+      <mass
+        value="7.5342" />
+      <inertia
+        ixx="0.055309"
+        ixy="1.1485E-07"
+        ixz="1.4167E-07"
+        iyy="0.053715"
+        iyz="-0.00019612"
+        izz="0.037383" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_01.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_01.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_1"
+    type="revolute">
+    <origin
+      xyz="0.0044104 -0.00027834 0.1965"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="Link_01" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-6.28"
+      upper="6.28"
+      effort="3000"
+      velocity="2.09" />
+  </joint>
+  <link
+    name="Link_02">
+    <inertial>
+      <origin
+        xyz="0.3763 -9.3278E-08 -0.22998"
+        rpy="0 0 0" />
+      <mass
+        value="24.858" />
+      <inertia
+        ixx="0.11252"
+        ixy="-3.916E-06"
+        ixz="0.012097"
+        iyy="2.799"
+        iyz="-2.2648E-07"
+        izz="2.7752" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_02.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_02.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_2"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="1.5708 0 0" />
+    <parent
+      link="Link_01" />
+    <child
+      link="Link_02" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.48"
+      upper="4.62"
+      effort="9000"
+      velocity="2.09" />
+  </joint>
+  <link
+    name="Link_03">
+    <inertial>
+      <origin
+        xyz="0.34361 -6.4382E-07 -0.055927"
+        rpy="0 0 0" />
+      <mass
+        value="8.3486" />
+      <inertia
+        ixx="0.01537"
+        ixy="-3.2986E-06"
+        ixz="-0.012094"
+        iyy="0.59177"
+        iyz="-4.9047E-08"
+        izz="0.58985" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_03.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_03.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_3"
+    type="revolute">
+    <origin
+      xyz="0.897 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_02" />
+    <child
+      link="Link_03" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.05"
+      upper="3.05"
+      effort="9000"
+      velocity="2.09" />
+  </joint>
+  <link
+    name="Link_04">
+    <inertial>
+      <origin
+        xyz="-4.9353E-08 -0.0057267 0.0052352"
+        rpy="0 0 0" />
+      <mass
+        value="1.2892" />
+      <inertia
+        ixx="0.0031175"
+        ixy="1.6387E-09"
+        ixz="-4.7004E-09"
+        iyy="0.0019091"
+        iyz="-3.865E-05"
+        izz="0.0029354" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_04.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_04.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_4"
+    type="revolute">
+    <origin
+      xyz="0.7445 0 -0.18835"
+      rpy="0 0 0" />
+    <parent
+      link="Link_03" />
+    <child
+      link="Link_04" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.48"
+      upper="4.62"
+      effort="6000"
+      velocity="3.84" />
+  </joint>
+  <link
+    name="Link_05">
+    <inertial>
+      <origin
+        xyz="4.0193E-08 -0.0051183 0.0035719"
+        rpy="0 0 0" />
+      <mass
+        value="1.33" />
+      <inertia
+        ixx="0.003343"
+        ixy="-4.8841E-09"
+        ixz="3.6485E-10"
+        iyy="0.0031635"
+        iyz="-2.4314E-05"
+        izz="0.0019534" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5708 3.1415 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_05.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5708 3.1415 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_05.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_5"
+    type="revolute">
+    <origin
+      xyz="0 -0.1385 0"
+      rpy="1.5708 0 0" />
+    <parent
+      link="Link_04" />
+    <child
+      link="Link_05" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-6.28"
+      upper="6.28"
+      effort="6000"
+      velocity="3.84" />
+  </joint>
+  <link
+    name="Link_06">
+    <inertial>
+      <origin
+        xyz="-0.00024633 0.00010625 -0.024169"
+        rpy="0 0 0" />
+      <mass
+        value="0.27866" />
+      <inertia
+        ixx="0.00019717"
+        ixy="-2.4932E-08"
+        ixz="-1.064E-07"
+        iyy="0.00020258"
+        iyz="-2.3745E-08"
+        izz="0.00033606" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_06.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.84706 0.84706 0.84706 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://jaka_description/meshes/jaka_zu20_meshes/Link_06.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_6"
+    type="revolute">
+    <origin
+      xyz="-0.00025841  0.1205 0.00025841"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="Link_05" />
+    <child
+      link="Link_06" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-6.28"
+      upper="6.28"
+      effort="2000"
+      velocity="3.84" />
+  </joint>
+
+  <transmission name="trans_joint_1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_1_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint_2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_2_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint_3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_3">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_3_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint_4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_4">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_4_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint_5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_5">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_5_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint_6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_6">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_6_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+</robot>
