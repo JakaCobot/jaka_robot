@@ -1,3 +1,29 @@
+/**************************************************************************
+ * 
+ * Copyright (c) 2024 JAKA Robotics, Ltd. All Rights Reserved.
+ * 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * For support or inquiries, please contact support@jaka.com.
+ * 
+ * File: jkerr.h
+ * @author star@jaka
+ * @date Nov-30-2021 
+ *  
+**************************************************************************/
+
+
 #ifndef _JHERR_H_
 #define _JHERR_H_
 
@@ -21,7 +47,7 @@
 #define ERR_EMPTY_FOLDER         -17             //not support empty folder
 
 
-#define ERR_PROTECTIVE_STOP      -20            // protective stop
+#define ERR_PROTECTIVE_STOP     -20            // protective stop
 #define ERR_EMERGENCY_STOP      -21            // protective stop
 #define ERR_SOFT_LIMIT          -22             // on soft limit
 
@@ -33,6 +59,19 @@
 #define ERR_MOVEJ               -41             // move joint error
 #define ERR_MOVEC               -42             // move circular error
 
-#define ERR_MOTION_TIMEOUT      -50             // block_wait timeout
+#define ERR_MOTION_TIMEOUT          -50             // block_wait timeout
+#define ERR_POWERON_TIMEOUT         -51             // power on timeout
+#define ERR_POWEROFF_TIMEOUT        -52             // power off timeout
+#define ERR_ENABLE_TIMEOUT          -53             // enable timeout
+#define ERR_DISABLE_TIMEOUT         -54             // disable robot timeout
+#define ERR_USERFRAME_SET_TIMEOUT   -55             // fail to set userframe
+#define ERR_TOOL_SET_TIMEOUT        -56             // fail to set tool
+
+#define ERR_IO_SET_TIMEOUT      -60             // fail to set IO
+#define ERR_OPERATION_TIMEOUT      -61             // operation timeout
+
+#define ERR_DEPRECATE -9998     // deprecated interface, will be removed in the future, function is still available
+#define ERR_OBSOLETE -9999      // obsolete interface, will be removed in the future, function is unavailable
+
 
 #endif

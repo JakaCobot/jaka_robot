@@ -1,8 +1,27 @@
-/**
-* @last update Nov 30 2021 
-* @Maintenance star@jaka
-*/
-
+/**************************************************************************
+ * 
+ * Copyright (c) 2024 JAKA Robotics, Ltd. All Rights Reserved.
+ * 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * For support or inquiries, please contact support@jaka.com.
+ * 
+ * File: JAKAZuRobot.h
+ * @author star@jaka
+ * @date Nov-30-2021 
+ *  
+**************************************************************************/
 
 
 #ifndef _JAKAAPI_H_
@@ -16,7 +35,7 @@
 
 #if defined(_WIN32) || defined(WIN32)
 /**
- * 低版本Visual Studio需要手动定义__cpluscplus宏
+    * @brief Constructor for the robotic arm control class
  */
 #if __cpluscplus
 
@@ -50,1107 +69,1719 @@ class DLLEXPORT_API JAKAZuRobot
 {
 public:
 	/**
-	* @brief 机械臂控制类构造函数
+	* @brief Robotic arm control class constructor
 	*/
 	JAKAZuRobot();
 
+///@name general part
+///@{
 	/**
-	* @brief 创建机器人控制句柄
-	* @param ip  控制器ip地址
-	* @return ERR_SUCC 成功 其他失败
+    * @brief Create a control handle for the robot
+	*
+    * @param ip IP address of the controller
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t login_in(const char *ip);
 
 	/**
-	* @brief 断开控制器连接
-	* @return ERR_SUCC 成功 其他失败
+    * @brief Disconnect the controller. The connection with the cobot will be then terminated.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t login_out();
 
 	/**
-	* @param handle  机器人控制句柄
-	* @return ERR_SUCC 成功 其他失败
+    * @brief Power on the cobot.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t power_on();
 
 	/**
-	* @brief 关闭机器人电源
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Power off the cobot.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t power_off();
 
 	/**
-	* @brief 机器人控制柜关机
-	* @return ERR_SUCC 成功 其他失败
+    * @brief  Shut down the control cabinet. The cobot must be disabled and powered off before executing this command.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t shut_down();
 
 	/**
-	* @brief 控制机器人上使能
-	* @return ERR_SUCC 成功 其他失败
+    * @brief Enable the cobot. The cobot must be powered on before executing this command.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t enable_robot();
 
 	/**
-	* @brief 控制机器人下使能
-	* @return ERR_SUCC 成功 其他失败
+    * @brief Disable the robot
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t disable_robot();
 
 	/**
-	* @brief 控制机器人手动模式下运动
-	* @param aj_num 1_based标识值，在关节空间下代表关节号0-5，笛卡尔下依次为x，y，z，rx，ry，rz
-	* @param move_mode 机器人运动模式，增量运动或者连续运动
-	* @param coord_type 机器人运动坐标系，工具坐标系，基坐标系（当前的世界/用户坐标系）或关节空间
-	* @param vel_cmd 指令速度，旋转轴或关节运动单位为rad/s，移动轴单位为mm/s
-	* @param pos_cmd 指令位置，旋转轴或关节运动单位为rad，移动轴单位为mm
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t jog(int aj_num, MoveMode move_mode, CoordType coord_type, double vel_cmd, double pos_cmd);
-
-	/**
-	* @brief 控制机器人手动模式下运动停止
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t jog_stop(int num);
-
-	/**
-	* @brief 机器人关节运动
-	* @param joint_pos 机器人关节运动目标位置
-	* @param move_mode 指定运动模式：增量运动(相对运动)或绝对运动
-	* @param is_block 设置接口是否为阻塞接口，TRUE为阻塞接口 FALSE为非阻塞接口
-	* @param speed 机器人关节运动速度，单位：rad/s
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t joint_move(const JointValue *joint_pos, MoveMode move_mode, BOOL is_block, double speed);
-
-	/**
-	* @brief 机器人关节运动
-	* @param joint_pos 机器人关节运动目标位置
-	* @param move_mode 指定运动模式：增量运动(相对运动)或绝对运动
-	* @param is_block 设置接口是否为阻塞接口，TRUE为阻塞接口 FALSE为非阻塞接口
-	* @param speed 机器人关节运动速度，单位：rad/s
-	* @param acc 机器人关节运动角加速度，单位：rad/s^2
-	* @param tol 机器人关节运动终点误差,单位：mm
-	* @param option_cond 机器人关节可选参数，如果不需要，该值可不赋值,填入空指针就可
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t joint_move(const JointValue *joint_pos, MoveMode move_mode, BOOL is_block, double speed, double acc, double tol, const OptionalCond *option_cond);
-
-	/**
-	* @brief 机器人末端直线运动
-	* @param end_pos 机器人末端运动目标位置
-	* @param move_mode 指定运动模式：增量运动(相对运动)或绝对运动
-	* @param is_block 设置接口是否为阻塞接口，TRUE 为阻塞接口 FALSE 为非阻塞接口
-	* @param speed 机器人直线运动速度，单位：mm/s
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t linear_move(const CartesianPose *end_pos, MoveMode move_mode, BOOL is_block, double speed);
-
-	/**
-	* @brief 机器人末端直线运动
-	* @param end_pos 机器人末端运动目标位置
-	* @param move_mode 指定运动模式：增量运动(相对运动)或绝对运动
-	* @param is_block 设置接口是否为阻塞接口，TRUE 为阻塞接口 FALSE 为非阻塞接口
-	* @param speed 机器人直线运动速度，单位：mm/s
-	* @param acc 机器人直线运动加速度,单位mm/s^2
-	* @param tol 机器人关节运动终点误差，单位mm
-	* @param option_cond 机器人关节可选参数，如果不需要，该值可不赋值,填入空指针就可
-	* @param ori_vel 姿态速度,单位rad/s
-	* @param ori_acc 姿态加速度,单位rad/s^2
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t linear_move(const CartesianPose *end_pos, MoveMode move_mode, BOOL is_block, double speed, double accel, double tol, const OptionalCond *option_cond, double ori_vel=3.14, double ori_acc=12.56);
-
-	/**
-	* @brief 机器人末端圆弧运动
-	* @param end_pos 机器人末端运动目标位置
-	* @param mid_pos 机器人末端运中间点
-	* @param move_mode 指定运动模式：增量运动(相对运动)或绝对运动
-	* @param is_block 设置接口是否为阻塞接口，TRUE 为阻塞接口 FALSE 为非阻塞接口
-	* @param speed 机器人圆弧运动速度，单位：rad/s
-	* @param acc 机器人圆弧运动加速度，单位：rad/s^2
-	* @param tol 机器人圆弧运动终点误差, 单位mm
-	* @param option_cond 机器人关节可选参数，如果不需要，该值可不赋值,填入空指针就可
-	* @param circle_cnt 指定机器人圆弧运动圈数。为0时等价于circular_move
-	* @param circle_mode 指定机器人圆弧运动模式，参数解释如下：
-	- 0：固定采用起始姿态到终止姿态旋转角度小于180°的轴角进行姿态变化；(当前方案)
-	- 1：固定采用起始姿态到终止姿态旋转角度大于180°的轴角进行姿态变化；
-	- 2：根据中间点姿态自动选择选择角度小于180°还是大于180°；
-	- 3： 姿态夹角与圆弧轴线始终保持一致。(当前整圆运动)
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t circular_move(const CartesianPose *end_pos, const CartesianPose *mid_pos, MoveMode move_mode, BOOL is_block, double speed, double accel, double tol, const OptionalCond *option_cond, int circle_cnt = 0, int circle_mode = 0);
-
-	/**
-	* @brief 机器人SERVO MOVE模式使能
-	* @param enable  TRUE为进入SERVO MOVE模式，FALSE表示退出该模式
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_move_enable(BOOL enable);
-
-	/**
-	* @brief 机器人关节空间位置控制模式
-	* @param joint_pos 机器人关节运动目标位置
-	* @param move_mode 指定运动模式：增量运动或绝对运动
-	* @return ERR_SUCC成功 其他失败
-	*/
-	errno_t servo_j(const JointValue *joint_pos, MoveMode move_mode);
-
-	/**
-	* @brief 机器人关节空间位置控制模式
-	* @param joint_pos 机器人关节运动目标位置
-	* @param move_mode 指定运动模式：增量运动或绝对运动
-	* @param step_num  倍分周期，servo_j运动周期为step_num*8ms，其中step_num>=1
-	* @return ERR_SUCC成功 其他失败
-	*/
-	errno_t servo_j(const JointValue *joint_pos, MoveMode move_mode, unsigned int step_num);
-
-	/**
-	* @brief 机器人笛卡尔空间位置控制模式
-	* @param cartesian_pose 机器人笛卡尔空间运动目标位置
-	* @param move_mode 指定运动模式：增量运动或绝对运动
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_p(const CartesianPose *cartesian_pose, MoveMode move_mode);
-
-	/**
-	* @brief 机器人笛卡尔空间位置控制模式
-	* @param cartesian_pose 机器人笛卡尔空间运动目标位置
-	* @param move_mode 指定运动模式：增量运动或绝对运动
-	* @param step_num  倍分周期，servo_p运动周期为step_num*8ms，其中step_num>=1
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_p(const CartesianPose *cartesian_pose, MoveMode move_mode, unsigned int step_num);
-
-	/**
-	* @brief 设置数字输出变量(DO)的值
-	* @param type DO类型
-	* @param index DO索引
-	* @param value DO设置值
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_digital_output(IOType type, int index, BOOL value);
-
-	/**
-	* @brief 设置模拟输出变量的值(AO)的值
-	* @param type AO类型
-	* @param index AO索引
-	* @param value AO设置值
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_analog_output(IOType type, int index, float value);
-
-	/**
-	* @brief 查询数字输入(DI)状态
-	* @param type DI类型
-	* @param index DI索引
-	* @param result DI状态查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_digital_input(IOType type, int index, BOOL *result);
-
-	/**
-	* @brief 查询数字输出(DO)状态
-	* @param type DO类型
-	* @param index DO索引
-	* @param result DO状态查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_digital_output(IOType type, int index, BOOL *result);
-
-	/**
-	* @brief 获取模拟量输入变量(AI)的值
-	* @param type AI的类型
-	* @param index AI索引
-	* @param result 指定AI状态查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_analog_input(IOType type, int index, float *result);
-
-	/**
-	* @brief 获取模拟量输出变量(AO)的值
-	* @param type AO的类型
-	* @param index AO索引
-	* @param result 指定AO状态查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_analog_output(IOType type, int index, float *result);
-
-	/**
-	* @brief 查询扩展IO模块是否运行
-	* @param is_running 扩展IO模块运行状态查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t is_extio_running(BOOL *is_running);
-
-	/**
-	* @brief 运行当前加载的作业程序
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t program_run();
-
-	/**
-	* @brief 暂停当前运行的作业程序
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t program_pause();
-
-	/**
-	* @brief 继续运行当前暂停的作业程序
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t program_resume();
-
-	/**
-	* @brief 终止当前执行的作业程序
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t program_abort();
-
-	/**
-	* @brief 加载指定的作业程序
-	* @param file 程序文件路径
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t program_load(const char *file);
-
-	/**
-	* @brief 获取已加载的作业程序名字
-	* @param file 程序文件路径
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_loaded_program(char *file);
-
-	/**
-	* @brief 获取当前机器人作业程序的执行行号
-	* @param curr_line 当前行号查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_current_line(int *curr_line);
-
-	/**
-	* @brief 获取机器人作业程序执行状态
-	* @param status 作业程序执行状态查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_program_state(ProgramState *status);
-
-	/**
-	* @brief 设置机器人运行倍率
-	* @param rapid_rate 是程序运行倍率，设置范围为[0,1]
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_rapidrate(double rapid_rate);
-
-	/**
-	* @brief 获取机器人运行倍率
-	* @param rapid_rate 当前控制系统倍率
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_rapidrate(double *rapid_rate);
-
-	/**
-	* @brief 设置指定编号的工具信息
-	* @param id 工具编号
-	* @param tcp 工具坐标系相对法兰坐标系偏置
-	* @param name 指定工具的别名
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_tool_data(int id, const CartesianPose *tcp, const char *name);
-
-	/**
-	* @brief 设置当前使用的工具ID
-	* @param id 工具坐标系ID
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_tool_id(const int id);
-
-	/**
-	* @brief 查询当前使用的工具ID
-	* @param id 工具ID查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_tool_id(int *id);
-
-	/**
-	* @brief 查询使用的工具信息
-	* @param id 工具ID查询结果
-	* @param tcp 工具坐标系相对法兰坐标系偏置
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_tool_data(int id, CartesianPose *tcp);
-
-	/**
-	* @brief 设置指定编号的用户坐标系信息
-	* @param id 用户坐标系编号
-	* @param user_frame 用户坐标系偏置值
-	* @param name 用户坐标系别名
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_user_frame_data(int id, const CartesianPose *user_frame, const char *name);
-
-	/**
-	* @brief 设置当前使用的用户坐标系ID
-	* @param id 用户坐标系ID
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_user_frame_id(const int id);
-
-	/**
-	* @brief 查询当前使用的用户坐标系ID
-	* @param id 获取的结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_user_frame_id(int *id);
-
-	/**
-	* @brief 查询使用的用户坐标系信息
-	* @param id 用户坐标系ID查询结果
-	* @param tcp 用户坐标系偏置值
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_user_frame_data(int id, CartesianPose *tcp);
-
-	/**
-	* @brief 控制机器人进入或退出拖拽模式
-	* @param enable  TRUE为进入拖拽模式，FALSE为退出拖拽模式
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t drag_mode_enable(BOOL enable);
-
-	/**
-	* @brief 查询机器人是否处于拖拽模式
-	* @param in_drag 查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t is_in_drag_mode(BOOL *in_drag);
-
-	/**
-	* @brief 获取机器人状态
-	* @param state 机器人状态查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_robot_state(RobotState *state);
-
-	/**
-	* @brief 获取当前设置下工具末端的位姿
-	* @param tcp_position 工具末端位置查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_tcp_position(CartesianPose *tcp_position);
-
-	/**
-	* @brief 获取当前机器人关节角度
-	* @param joint_position 关节角度查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_joint_position(JointValue *joint_position);
-
-	/**
-	* @brief 查询机器人是否处于碰撞保护模式
-	* @param in_collision 查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t is_in_collision(BOOL *in_collision);
-
-	/**
-	* @brief 查询机器人是否超出限位
-	* @param on_limit 查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t is_on_limit(BOOL *on_limit);
-
-	/**
-	* @brief 查询机器人运动是否停止
-	* @param in_pos 查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t is_in_pos(BOOL *in_pos);
-
-	/**
-	 * @brief 设置机器人运动判断inpos的阈值，默认为0.003rad
-	 * @param handle 机器人控制句柄
-	 * @param thresholding 当关节角运动低于该值时，in_pos返回为1
-	 * @param ERR_SUCC 成功
-	 */
-	errno_t set_in_pos_thresholding(const double thresholding);
-
-	/**
-	 * @brief 获取机器人运动判断inpos的阈值，默认为0.003rad
-	 * @param handle 机器人控制句柄
-	 * @param thresholding 查询结果
-	 * @param ERR_SUCC 成功
-	 */
-	errno_t get_in_pos_thresholding(double *thresholding);
-
-	/**
-	* @brief 碰撞之后从碰撞保护模式恢复
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t collision_recover();
-
-	/**
-	* @brief  错误状态清除
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t clear_error();
-
-	/**
-	* @brief 设置机器人碰撞等级
-	* @param level  碰撞等级，等级0-5 ，0为关闭碰撞，1为碰撞阈值25N，2为碰撞阈值50N，3为碰撞阈值75N，4为碰撞阈值100N，5为碰撞阈值125N
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_collision_level(const int level);
-
-	/**
-	* @brief 获取机器人设置的碰撞等级
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_collision_level(int *level);
-
-	// /**
-	// * @brief 
-	// * @param 
-	// * @return ERR_SUCC 成功 其他失败
-	// */
-	// errno_t set_collision_option(CollisionOption option, CollisionOptionSettingType type = CollisionOptionSettingType::CollitionOption_ReboundAngle);
-
-
-	/**
-	* @brief 计算指定位姿在当前工具、当前安装角度以及当前用户坐标系设置下的逆解
-	* @param ref_pos 逆解计算用的参考关节空间位置
-	* @param cartesian_pose 笛卡尔空间位姿值
-	* @param joint_pos 计算成功时关节空间位置计算结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t kine_inverse(const JointValue *ref_pos, const CartesianPose *cartesian_pose, JointValue *joint_pos);
-
-	/**
-	* @brief 计算指定关节位置在当前工具、当前安装角度以及当前用户坐标系设置下的位姿值
-	* @param joint_pos 关节空间位置
-	* @param cartesian_pose 笛卡尔空间位姿计算结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t kine_forward(const JointValue *joint_pos, CartesianPose *cartesian_pose);
-
-	/**
-	* @brief 欧拉角到旋转矩阵的转换
-	* @param rpy 待转换的欧拉角数据
-	* @param rot_matrix 转换后的旋转矩阵
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t rpy_to_rot_matrix(const Rpy *rpy, RotMatrix *rot_matrix);
-
-	/**
-	* @brief 旋转矩阵到欧拉角的转换
-	* @param rot_matrix 待转换的旋转矩阵数据
-	* @param rpy 转换后的RPY欧拉角结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t rot_matrix_to_rpy(const RotMatrix *rot_matrix, Rpy *rpy);
-
-	/**
-	* @brief 四元数到旋转矩阵的转换
-	* @param quaternion 待转换的四元数数据
-	* @param rot_matrix 转换后的旋转矩阵结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t quaternion_to_rot_matrix(const Quaternion *quaternion, RotMatrix *rot_matrix);
-
-	/**
-	* @brief 旋转矩阵到四元数的转换
-	* @param rot_matrix 待转换的旋转矩阵
-	* @param quaternion 转换后的四元数结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t rot_matrix_to_quaternion(const RotMatrix *rot_matrix, Quaternion *quaternion);
-
-	/**
-	* @brief 注册机器人出现错误时的回调函数
-	* @param func 指向用户定义的函数的函数指针
-	* @param error_code 机器人的错误码
-	*/
-	errno_t set_error_handler(CallBackFuncType func);
-
-	/**
-	* @brief 机器人负载设置
-	* @param payload 负载质心、质量数据
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_payload(const PayLoad *payload);
-
-	/**
-	* @brief 获取机器人负载数据
-	* @param payload 负载查询结果
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_payload(PayLoad *payload);
-
-	/**
-	* @brief 获取SDK版本号
-	* @param version SDK版本号
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_sdk_version(char *version);
-
-	/**
-	* @brief 获取控制器IP
-	* @param controller_name 控制器名字
-	* @param ip_list 控制器ip列表，控制器名字为具体值时返回该名字所对应的控制器IP地址，控制器名字为空时，返回网段类内的所有控制器IP地址
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_controller_ip(char *controller_name, char *ip_list);
-
-	/**
-	* @brief 获取机器人状态数据
-	* @param status 机器人状态
-	* @return ERR_SUCC 成功 其他失败
+    * @brief Get current status of the cobot(A large struct contains as more data as possible).
+	* @deprecated please check each inner data using corresponding interfaces instead of this one. 
+	* @warning please note that config of OptionalInfoConfig.ini may affect data from port 10004 and data in RobotStatus without error
+	* if you're not familiar with this, please keep OptionalInfoConfig.ini no changed as defalut setting. 
+	*
+    * @param status Robot status
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_robot_status(RobotStatus *status);
 
 	/**
-	* @brief 终止当前机械臂运动
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get current status of the cobot(A small struct only contains error/poweron/enable info).
+	*
+	* @param status Pointer for the returned cobot status.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
-	errno_t motion_abort();
+	errno_t get_robot_status_simple(RobotStatus_simple *status);
 
 	/**
-	* @brief 设置错误码文件路径，需要使用get_last_error接口时需要设置错误码文件路径，如果不使用get_last_error接口，则不需要设置该接口
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get current status of the cobot
+	* @deprecated please use "get_robot_status_simple" instead
+	*
+	* @param state Pointer for the returned cobot status.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
-	errno_t set_errorcode_file_path(char *path);
+	errno_t get_robot_state(RobotState* state);
 
 	/**
-	* @brief 获取机器人运行过程中最后一个错误码,当调用clear_error时，最后一个错误码会清零
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_last_error(ErrorCode *code);
-
-	/**
-	* @brief 设置是否开启调试模式，选择TRUE时，开始调试模式，此时会在标准输出流中输出调试信息，选择FALSE时，不输出调试信息
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_debug_mode(BOOL mode);
-
-	/**
-	* @brief 设置轨迹复现配置参数
-	* @param para 轨迹复现配置参数
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_traj_config(const TrajTrackPara *para);
-
-	/**
-	* @brief 获取轨迹复现配置参数
-	* @param para 轨迹复现配置参数
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_traj_config(TrajTrackPara *para);
-
-	/**
-	* @brief 采集轨迹复现数据控制开关
-	* @param mode 选择TRUE时，开始数据采集，选择FALSE时，结束数据采集
-	* @param filename 采集数据的存储文件名，当filename为空指针时，存储文件以当前日期命名
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_traj_sample_mode(const BOOL mode, char *filename);
-
-	/**
-	* @brief 采集轨迹复现数据状态查询
-	* @param mode 为TRUE时，数据正在采集，为FALSE时，数据采集结束，在数据采集状态时不允许再次开启数据采集开关
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_traj_sample_status(BOOL *sample_status);
-
-	/**
-	* @brief 查询控制器中已经存在的轨迹复现数据的文件名
-	* @param filename 控制器中已经存在的轨迹复现数据的文件名
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_exist_traj_file_name(MultStrStorType *filename);
-
-	/**
-	* @brief 重命名轨迹复现数据的文件名
-	* @param src 原文件名
-	* @param dest 目标文件名，文件名长度不能超过100个字符，文件名不能为空，目标文件名不支持中文
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t rename_traj_file_name(const char *src, const char *dest);
-
-	/**
-	* @brief 删除控制器中轨迹复现数据文件
-	* @param filename 要删除的文件的文件名，文件名为数据文件名字
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t remove_traj_file(const char *filename);
-
-	/**
-	* @brief 控制器中轨迹复现数据文件生成控制器执行脚本
-	* @param filename 数据文件的文件名，文件名为数据文件名字，不带后缀
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t generate_traj_exe_file(const char *filename);
-
-	/**
-	* @brief SERVO模式下不使用滤波器,该指令在SERVO模式下不可设置，退出SERVO后可设置
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_move_use_none_filter();
-
-	/**
-	* @brief SERVO模式下关节空间一阶低通滤波,该指令在SERVO模式下不可设置，退出SERVO后可设置
-	* @param cutoffFreq 一阶低通滤波器截止频率
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_move_use_joint_LPF(double cutoffFreq);
-
-	/**
-	* @brief SERVO模式下关节空间非线性滤波,该指令在SERVO模式下不可设置，退出SERVO后可设置
-	* @param max_vr 笛卡尔空间姿态变化速度的速度上限值（绝对值）°/s
-	* @param max_ar 笛卡尔空间姿态变化速度的加速度上限值（绝对值）°/s^2
-	* @param max_jr 笛卡尔空间姿态变化速度的加加速度上限值（绝对值）°/s^3
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_move_use_joint_NLF(double max_vr, double max_ar, double max_jr);
-
-	/**
-	* @brief SERVO模式下笛卡尔空间非线性滤波,该指令在SERVO模式下不可设置，退出SERVO后可设置
-	* @param max_vp 笛卡尔空间下移动指令速度的上限值（绝对值）。单位：mm/s
-	* @param max_ap 笛卡尔空间下移动指令加速度的上限值（绝对值）。单位：mm/s^2
-	* @param max_jp 笛卡尔空间下移动指令加加速度的上限值（绝对值）单位：mm/s^3
-	* @param max_vr 笛卡尔空间姿态变化速度的速度上限值（绝对值）°/s
-	* @param max_ar 笛卡尔空间姿态变化速度的加速度上限值（绝对值）°/s^2
-	* @param max_jr 笛卡尔空间姿态变化速度的加加速度上限值（绝对值）°/s^3
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_move_use_carte_NLF(double max_vp, double max_ap, double max_jp, double max_vr, double max_ar, double max_jr);
-
-	/**
-	* @brief SERVO模式下关节空间多阶均值滤波器,该指令在SERVO模式下不可设置，退出SERVO后可设置
-	* @param max_buf 均值滤波器缓冲区的大小
-	* @param kp 加速度滤波系数
-	* @param kv 速度滤波系数
-	* @param ka 位置滤波系数
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_move_use_joint_MMF(int max_buf, double kp, double kv, double ka);
-
-	/**
-	* @brief SERVO模式下速度前瞻参数设置
-	* @param max_buf 缓冲区的大小
-	* @param kp 加速度滤波系数
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t servo_speed_foresight(int max_buf, double kp);
-
-	/**
-	* @brief get SDK log path
-	* @param path path of SDK log
-	* @param size size of char* buffer
-	* @return error code 
-	*/
-	static errno_t static_Get_SDK_filepath(char* path, int size);
-
-	/**
-	* @brief get SDK log path
-	* @param path path of SDK log
-	* @param size size of char* buffer
-	* @return error code 
-	*/
-	errno_t get_SDK_filepath(char* path, int size);
-
-	/**
-	* @brief 设置SDK日志路径
-	* @param filepath SDK日志路径
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_SDK_filepath(const char *filepath);
-
-	/**
-	* @brief 同set_SDK_filepath
-	*/
-	static errno_t static_Set_SDK_filepath(const char *filepath);
-
-	/**
-	* @brief 设置传感器品牌
-	* @param sensor_brand 传感器品牌，可选值为1,2,3 分别代表不同品牌力矩传感器
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_torsenosr_brand(int sensor_brand);
-
-	/**
-	* @brief 获取传感器品牌
-	* @param sensor_brand 传感器品牌，可选值为1,2,3 分别代表不同品牌力矩传感器
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_torsenosr_brand(int *sensor_brand);
-
-	/**
-	* @brief 开启或关闭力矩传感器
-	* @param sensor_mode 0代表关闭传感器，1代表开启力矩传感器
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_torque_sensor_mode(int sensor_mode);
-
-	/**
-	* @brief 设置柔顺控制参数
-	* @param axis 代表配置哪一轴，可选值为0~5
-	* @param opt 柔顺方向，可选值为 1 2 3 4 5 6分别对应 fx fy fz mx my mz 0代表没有勾选
-	* @param ftUser 阻尼力，表示用户用多大的力才能让机器人的沿着某个方向以最大速度进行运动
-	* @param ftConstant 代表恒力，手动操作时全部设置为0
-	* @param ftNnormalTrack 法向跟踪，手动操作时全部设置为0,
-	* @param ftReboundFK 回弹力，表示机器人回到初始状态的能力
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_admit_ctrl_config(int axis, int opt, double ftUser, double ftConstant, int ftNnormalTrack, double ftReboundFK);
-
-	/**
-	* @brief 开始辨识工具末端负载
-	* @param joint_pos 使用力矩传感器进行自动负载辨识时的结束位置
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t start_torq_sensor_payload_identify(const JointValue *joint_pos);
-
-	/**
-	* @brief 获取末端负载辨识状态
-	* @param identify_status 0代表辨识完成，1代表未完成，2代表辨识失败
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_torq_sensor_identify_staus(int *identify_status);
-
-	/**
-	* @brief 获取末端负载辨识结果
-	* @param payload 末端负载
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_torq_sensor_payload_identify_result(PayLoad *payload);
-
-	/**
-	* @brief 设置传感器末端负载
-	* @param payload 末端负载
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_torq_sensor_tool_payload(const PayLoad *payload);
-
-	/**
-	* @brief 获取传感器末端负载
-	* @param payload 末端负载
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_torq_sensor_tool_payload(PayLoad *payload);
-
-	/**
-	* @brief 力控拖拽使能
-	* @param enable_flag 0为关闭力控拖拽使能，1为开启
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t enable_admittance_ctrl(const int enable_flag);
-
-	/**
-	* @brief 设置力控类型和传感器初始化状态
-	* @param sensor_compensation 是否开启传感器补偿,1代表开启即初始化,0代表不初始化
-	* @param compliance_type 0 代表不使用任何一种柔顺控制方法 1 代表恒力柔顺控制,2 代表速度柔顺控制
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_compliant_type(int sensor_compensation, int compliance_type);
-
-	/**
-	* @brief 获取力控类型和传感器初始化状态
-	* @param sensor_compensation 是否开启传感器补偿,1代表开启即初始化,0代表不初始化
-	* @param compliance_type 0 代表不使用任何一种柔顺控制方法 1 代表恒力柔顺控制,2 代表速度柔顺控制
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_compliant_type(int *sensor_compensation, int *compliance_type);
-
-	/**
-	* @brief 获取力控柔顺控制参数
-	* @param admit_ctrl_cfg 机器人力控柔顺控制参数存储地址
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_admit_ctrl_config(RobotAdmitCtrl *admit_ctrl_cfg);
-
-	/**
-	* @brief 设置力控传感器ip地址
-	* @param type 0为使用tcp/ip协议，1为使用RS485协议
-	* @param ip_addr为力控传感器地址
-	* @param port为使用tcp/ip协议时力控传感器端口号
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_torque_sensor_comm(const int type, const char *ip_addr, const int port);
-
-	/**
-	* @brief 获取力控传感器ip地址
-	* @param type 0为使用tcp/ip协议，1为使用RS485协议
-	* @param ip_addr为力控传感器地址
-	* @param port为使用tcp/ip协议时力控传感器端口号
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_torque_sensor_comm(int *type, char *ip_addr, int *port);
-
-	/**
-	* @brief 设置力控的低通滤波器的值
-	* @param torque_sensor_filter 低通滤波器的值,单位：Hz
-	*/
-	errno_t set_torque_sensor_filter(const float torque_sensor_filter);
-
-	/**
-	* @brief 获取力控的低通滤波器的值
-	* @param torque_sensor_filter 低通滤波器的值,单位：Hz
-	*/
-	errno_t get_torque_sensor_filter(float *torque_sensor_filter);
-
-	/**
-	* @brief 设置力传感器的传感器限位参数配置
-	* @param torque_sensor_soft_limit 力传感器的传感器限位参数
-	*/
-	errno_t set_torque_sensor_soft_limit(const FTxyz torque_sensor_soft_limit);
-
-	/**
-	* @brief 获取力传感器的传感器限位参数配置
-	* @param torque_sensor_soft_limit 力传感器的传感器限位参数
-	*/
-	errno_t get_torque_sensor_soft_limit(FTxyz *torque_sensor_soft_limit);
-
-	/**
-	* @brief 关闭力控
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t disable_force_control();
-
-	/**
-	* @brief 设置速度柔顺控制参数
-	* @param vel_cfg为速度柔顺控制参数
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_vel_compliant_ctrl(const VelCom *vel_cfg);
-
-	/**
-	* @brief 设置柔顺控制力矩条件
-	* @param ft为柔顺控制力矩条件
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_compliance_condition(const FTxyz *ft);
-
-	/**
-	* @brief 设置网络异常，SDK与机器人控制器失去连接后多长时间机器人控制器终止机械臂当前运动
-	* @param millisecond 时间参数，单位毫秒
-	* @param mnt 网络异常时机器人需要进行的动作类型
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_network_exception_handle(float millisecond, ProcessType mnt);
-
-	/**
-	* @brief 设置机器人状态数据自动更新时间间隔
-	* @param millisecond 时间参数，单位毫秒
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_status_data_update_time_interval(float millisecond);
-
-	/**
-	* @brief 设置机器人阻塞等待超时时间
-	* @param seconds 时间参数，单位秒
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_block_wait_timeout(float seconds);
-
-	/**
-	* @brief 设置导纳控制运动坐标系
-	* @param ftFrame 0工具 1世界 
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t set_ft_ctrl_frame(const int ftFrame);
-
-	/**
-	* @brief 获取导纳控制运动坐标系
-	* @param ftFrame 0工具 1世界
-	* @return ERR_SUCC 成功 其他失败
-	*/
-	errno_t get_ft_ctrl_frame(int* ftFrame);
-
-	/**
-	* @brief 获取dh参数
-	* @param dh_param DH参数
-	* @return ERR_SUCC 成功，其它失败
+    * @brief Get the Denavit–Hartenberg parameters of the cobot.
+	*
+	* @param dhParam Pointer of a varible to save the returned Denavit–Hartenberg parameters.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_dh_param(DHParam* dh_param);
 
 	/**
-	* @brief 设置安装角度
-	* @param angleX 绕X轴旋转角度
-	* @param angleZ 绕Z轴旋转角度
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Set installation (or mounting) angle of the cobot.
+	*
+    * @param angleX Rotation angle around the X-axis
+    * @param angleZ Rotation angle around the Z-axis
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t set_installation_angle(double angleX, double angleZ);
 
 	/**
-	* @brief 获取安装角度
-	* @param quat 安装角度四元数
-	* @param appang 安装角度RPY角
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get installation (or mounting) angle of the cobot.
+	*
+	* @param quat Pointer for the returned result in quaternion.
+	* @param appang Pointer for the returned result in RPY.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_installation_angle(Quaternion* quat, Rpy* appang);
 
 	/**
-	* @brief 设置tioV3电压参数
-	* @param vout_enable 电压使能，0:关，1开
-	* @param vout_vol 电压大小 0:24v 1:12v
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Registor Callback funtion used when controller raise error	
+	* @deprecated Only useful before SDK 2.1.12, check return code of each interface instead of using this
+	*
+	* @param func Callback function
+	* 
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_error_handler(CallBackFuncType func);
+///@}
+	
+///@name motion part
+///@{
+
+	/**
+	* @brief Set timeout of motion block
+	* @deprecated  Used only in SDK version before v2.1.12
+	* 
+	* @param seconds Timeout, unit: second
+	* 
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_block_wait_timeout(float seconds);
+
+	/**
+	* @brief Set time interval of getting data via port 10004
+	* @deprecated  Used only in SDK version before v2.1.12
+	*
+	* @param millisecond Time interval, unit: millisecond
+	* 
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_status_data_update_time_interval(float millisecond);
+
+	/**
+	* @brief Jog a single joint or axis of the cobot to move in specified mode
+	*
+    * @param aj_num 0-based axis or joint number, indicating joint number 0-5 in joint space, and x, y, z, rx, ry, rz in Cartesian space
+    * @param move_mode Robot motion mode, incremental motion or continuous motion
+    * @param coord_type Robot motion coordinate system, tool coordinate system, base coordinate system (current world/user coordinate system) or joint space
+    * @param vel_cmd Commanded velocity, unit rad/s for rotary axis or joint motion, mm/s for moving axis
+    * @param pos_cmd Commanded position, unit rad for rotary axis or joint motion, mm for moving axis
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t jog(int aj_num, MoveMode move_mode, CoordType coord_type, double vel_cmd, double pos_cmd);
+
+	/**
+	* @brief Stop the ongoing jog movement.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t jog_stop(int num);
+
+	/**
+	* @brief Move the cobot in joint space, without consideration of the path of TCP in Cartesian space.
+	*
+    * @param joint_pos Target position for robot joint motion
+    * @param move_mode Specifies the motion mode: incremental motion (relative motion) or absolute motion
+    * @param is_block Set whether the interface is a blocking interface, TRUE for blocking interface, FALSE for non-blocking interface
+    * @param speed Robot joint motion speed, unit: rad/s
+    * @param acc Robot joint motion angular acceleration, unit: rad/s^2
+    * @param tol Robot joint motion end point error, unit: mm
+    * @param option_cond Optional parameters for robot joints, if not needed, the value can be left unassigned, just fill in a null pointer
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t joint_move(const JointValue *joint_pos, MoveMode move_mode, BOOL is_block, double speed, double acc = 90, double tol = 0, const OptionalCond *option_cond= nullptr);
+
+	/**
+	 * @brief joint move with single param
+	 *
+	 * @param param contains all necessary param
+	 *
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	 */
+	errno_t joint_move(MoveJParam param);
+
+	/**
+	* @brief Move the cobot in Cartesian space, the TCP will move linearly.
+	*
+	* @param end_pos The target position of the robot's end motion.
+	* @param move_mode Specify the motion mode: incremental (relative) or absolute.
+	* @param is_block Set if the interface is a blocking interface, TRUE for blocking interface FALSE for non-blocking interface.
+	* @param speed Robot linear motion speed, unit: mm/s
+	* @param acc Acceleration of the robot in mm/s^2.
+	* @param tol The robot's endpoint error in mm.
+	* @param option_cond robot joint optional parameters, if not needed, the value can not be assigned, fill in the empty pointer can be
+	* @param ori_vel Attitude velocity, unit rad/s
+	* @param ori_acc Attitude acceleration, unit rad/s^2.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t linear_move(const CartesianPose *end_pos, MoveMode move_mode, BOOL is_block, double speed, double accel = 500, double tol = 0, const OptionalCond *option_cond = nullptr, double ori_vel=3.14, double ori_acc=12.56);
+
+	/**
+	 *@brief Move the cobot linearly in Cartesian space, with a packed parameter.
+	 *
+	 * @param param Packed parameter with all required inside.
+	 *
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t linear_move(MoveLParam param);
+
+	/**
+	* @brief Move the cobot in Cartesan space and the TCP will move along the definded arc.
+	*
+	* @param end_pos The target position of the robot's end motion.
+	* @param mid_pos The midpoint of the robot's end motion.
+	* @param move_mode Specify the motion mode: incremental (relative) or absolute.
+	* @param is_block Set if the interface is a blocking interface, TRUE for blocking interface FALSE for non-blocking interface.
+	* @param speed the robot arc speed, unit: rad/s
+	* @param acc The acceleration of the robot's arc motion, in rads/s^2.
+	* @param tol endpoint error of the robot's circular motion, in millimeters.
+	* @param option_cond Optional parameter for robot joint, if not needed, this value can not be assigned, just fill in the empty pointer.
+	* @param circle_cnt Specifies the number of circles of the robot. A value of 0 is equivalent to circle_move.
+	* @param circle_mode Specifies the mode of the robot's circular motion, the parameter explanation is as follows:
+	- 0: Fixed to use the axis angle of rotation angle less than 180° from the start attitude to the end attitude for attitude change; (current program)
+	- 1: Fixedly adopts the axis angle of the rotation angle from the start attitude to the termination attitude which is greater than 180° for attitude change;
+	- 2: Selection of whether the angle is less than 180° or more than 180° is automatically chosen according to the midpoint attitude;
+	- 3: The attitude pinch angle is always consistent with the arc axis. (Current whole circle motion)
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t circular_move(const CartesianPose *end_pos, const CartesianPose *mid_pos, MoveMode move_mode, BOOL is_block, double speed, double accel, double tol, const OptionalCond *option_cond = nullptr, int circle_cnt = 0, int circle_mode = 0);
+
+	/**
+	 * @brief Move the cobot in Cartesan space along the definded arc, with a packed parameter.
+	 * 
+	 * @param param Packed parameter with all required inside.
+	 *
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t circular_move(MoveCParam param);
+
+	/**
+	* @brief Setting the robot run rate
+	*
+	* @param rapid_rate Value of the velociry rate, range from [0,1].
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_rapidrate(double rapid_rate);
+
+	/**
+	* @brief Get the robot runtime rate
+	*
+	* @param rapid_rate Pointer for the returned current velocity rate.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_rapidrate(double *rapid_rate);
+
+	/**
+	* @brief Define the data of tool with specified ID.
+	*
+	* @param id ID of the tool to be defined.
+	* @param tcp Data of the tool to be set.
+	* @param name Alias name of the tool to be set.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_tool_data(int id, const CartesianPose *tcp, const char *name);
+
+	/**
+	* @brief Switch to the tool with specified ID.
+	*
+	* @param id ID of the tool.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_tool_id(const int id);
+
+	/**
+	* @brief Get ID of the tool currently used.
+	*
+	* @param id Pointer for the returned current tool ID.		
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_tool_id(int *id);
+
+	/**
+	* @brief Get definition data of the tool with specified ID.
+	*
+	* @param id ID of the tool.
+	* @param tcp Pointer for the returned tool data	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_tool_data(int id, CartesianPose *tcp);
+
+	/**
+	* @brief Define the data of user frame with specified ID.
+	*
+	* @param id ID of the user frame.
+	* @param user_frame Data of the user frame to be set.
+	* @param name Alias	name of the user frame.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_user_frame_data(int id, const CartesianPose *user_frame, const char *name);
+
+	/**
+	* @brief Switch to the user frame with specified ID.
+	*
+	* @param id ID of the user frame.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_user_frame_id(const int id);
+
+	/**
+	* @brief Get ID of the user frame currently used.
+	*
+	* @param id Pointer for the returned current user frame ID.		
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_user_frame_id(int *id);
+
+	/**
+	* @brief Get definition data of the user frame with specified ID.
+	*
+	* @param id ID of the user frame.
+	* @param tcp Pointer for the returned user frame data	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_user_frame_data(int id, CartesianPose *user_frame);
+
+	/**
+	* @brief Set payload for the cobot.
+	*
+	* @param payload payload data to be set.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_payload(const PayLoad *payload);
+
+	/**
+	* @brief Get current payload of the cobot.
+	*
+	* @param payload Pointer for the returned payload data.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_payload(PayLoad *payload);
+
+	/**
+	* @brief Get the position of the end of the tool in the current setting.
+	*
+	* @param tcp_position Pointer for the returned TCP position.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_tcp_position(CartesianPose *tcp_position);
+
+	/**
+	* @brief Get current joint position.
+	*
+	* @param joint_position Pointer for the return joint position.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_joint_position(JointValue *joint_position);
+
+	/**
+	 * @brief Check if the cobot is now in E-Stop state.
+	 *
+	 * @param estop Pointer for the returned result.	
+	 *
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	 */	
+	errno_t is_in_estop(BOOL *estop);
+
+	/**
+	* @brief Check if the cobot is now on soft limit.
+	*
+	* @param on_limit Pointer for the returned result.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t is_on_limit(BOOL *on_limit);
+
+	/**
+	* @brief Check if the cobot has completed the motion (does not mean reached target).
+	*
+	* @param in_pos Pointer for the returned result.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t is_in_pos(BOOL *in_pos);
+
+	/**
+	* @brief Stop all the ongoing movements of the cobot.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t motion_abort();
+	
+	/**
+	* @brief Get motion status of the cobot.
+	*
+	* @param status Pointer for the returned motion status.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	 */
+	errno_t get_motion_status(MotionStatus *status);
+
+///@}
+
+///@name TIO part
+///@{
+
+	/**
+	* @brief Set voltage parameter for TIO of the cobot. It only takes effect for TIO with hardware version 3.
+	*
+	* @param vout_enable Option to enable voltage output. 0:turn off， 1:turn on.
+	* @param vout_vol Option to set output voltage. 0: 24V, 1:12V.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t set_tio_vout_param(int vout_enable, int vout_vol);
 
 	/**
-	* @brief 获取tioV3电压参数
-	* @param vout_enable 电压使能，0:关，1开
-	* @param vout_vol 电压大小 0:24v 1:12v
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get voltage parameter of TIO of the cobot. It only takes effect for TIO with hardware version 3.
+	* 
+	* @param vout_enable Pointer for the returned voltage enabling option.
+	* @param vout_vol Pointer for the returned output voltage option.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_tio_vout_param(int* vout_enable, int* vout_vol);
 
 	/**
-	* @brief 添加或修改信号量
-	* @param sign_info 信号量参数
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Add or modify the signal for TIO RS485 channels.
+	*
+	* @param sign_info Definition data of the signal.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t add_tio_rs_signal(SignInfo sign_info);
 
 	/**
-	* @brief 删除信号量
-	* @param sig_name 信号量名称
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Delete the specified signal for TIO RS485 channel.
+	*
+	* @param sig_name Signal name.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t del_tio_rs_signal(const char* sig_name);
 
 	/**
-	* @brief RS485发送命令
-	* @param chn_id 通道号
-	* @param data 数据字段
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Send a command to the specified RS485 channel.
+	*
+	* @param chn_id ID of the RS485 channel in TIO.
+	* @param data Command data.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t send_tio_rs_command(int chn_id, uint8_t* data,int buffsize);
 
 	/**
-	* @brief 获取信号量信息
-	* @param SignInfo* 信号量信息数组
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get all the defined signals in TIO module.
+	* 
+	* @param sign_info_array Pointer for the returned signal list.
+	* @param array_len Pointer for the size of the returned signal list.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_rs485_signal_info(SignInfo* sign_info_array, int* array_len);
 
 	/**
-	* @brief 设置tio模式
-	* @param pin_type tio类型 0 for DI Pins, 1 for DO Pins, 2 for AI Pins
-	* @param pin_type tio模式DI Pins: 0:0x00 DI2为NPN,DI1为NPN,1:0x01 DI2为NPN,DI1为PNP, 2:0x10 DI2为PNP,DI1为NPN,3:0x11 DI2为PNP,DI1为PNP
-							 DO Pins: 低8位数据高4位为DO2配置，低四位为DO1配置,0x0 DO为NPN输出, 0x1 DO为PNP输出, 0x2 DO为推挽输出, 0xF RS485H接口
-							 AI Pins: 0:模拟输入功能使能，RS485L禁止, 1:RS485L接口使能，模拟输入功能禁止
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Set tio mode.
+	*
+	* @param pin_type tio type 0 for DI Pins, 1 for DO Pins, 2 for AI Pins
+	* @param pin_type tio mode DI Pins: 0:0x00 DI2 is NPN,DI1 is NPN,1:0x01 DI2 is NPN,DI1 is PNP, 2:0x10 DI2 is PNP,DI1 is NPN,3:0x11 DI2 is PNP,DI1 is PNP
+							 DO Pins: Low 8-bit data high 4-bit for DO2 configuration, low 4-bit for DO1 configuration, 0x0 DO for NPN output, 0x1 DO for PNP output, 0x2 DO for push-pull output, 0xF RS485H interface
+							 AI Pins: 0: analog input function enable, RS485L disable, 1: RS485L interface enable, analog input function disable
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t set_tio_pin_mode(int pin_type, int pin_mode);
 
 	/**
-	* @brief 获取tio模式
-	* @param pin_type tio类型 0 for DI Pins, 1 for DO Pins, 2 for AI Pins
-	* @param pin_type tio模式DI Pins: 0:0x00 DI2为NPN,DI1为NPN,1:0x01 DI2为NPN,DI1为PNP, 2:0x10 DI2为PNP,DI1为NPN,3:0x11 DI2为PNP,DI1为PNP
-							 DO Pins: 低8位数据高4位为DO2配置，低四位为DO1配置,0x0 DO为NPN输出, 0x1 DO为PNP输出, 0x2 DO为推挽输出, 0xF RS485H接口
-							 AI Pins: 0:模拟输入功能使能，RS485L禁止, 1:RS485L接口使能，模拟输入功能禁止
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get mode of the TIO pin of specified type.
+	*
+	* @param pin_type tio type 0 for DI Pins, 1 for DO Pins, 2 for AI Pins
+	* @param pin_mode tio mode DI Pins: 0:0x00 DI2 is NPN,DI1 is NPN,1:0x01 DI2 is NPN,DI1 is PNP, 2:0x10 DI2 is PNP,DI1 is NPN,3:0x11 DI2 is PNP,DI1 is PNP
+							 DO Pins: Low 8-bit data high 4-bit for DO2 configuration, low 4-bit for DO1 configuration, 0x0 DO for NPN output, 0x1 DO for PNP output, 0x2 DO for push-pull output, 0xF RS485H interface
+							 AI Pins: 0: analog input function enable, RS485L disable, 1: RS485L interface enable, analog input function disable
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_tio_pin_mode(int pin_type, int* pin_mode);
 
 	/**
-	* @brief RS485通讯参数配置
-	* @param ModRtuComm 当通道模式设置为Modbus RTU时，需额外指定Modbus从站节点ID
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Setup communication for specified RS485 channel.
+	*
+	* @param ModRtuComm When the channel mode is set to Modbus RTU, you need to specify the Modbus slave node ID additionally.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t set_rs485_chn_comm(ModRtuComm mod_rtu_com);
 
 	/**
-	* @brief RS485通讯参数查询
-	* @param ModRtuComm 查询时chn_id作为输入参数
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get RS485 commnunication setting.
+	* 
+	* @param mod_rtu_com Pointer for the returned communication settings.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_rs485_chn_comm(ModRtuComm* mod_rtu_com);
 
 	/**
-	* @brief RS485通讯模式配置
-	* @param chn_id 0: RS485H, channel 1; 1: RS485L, channel 2
-	* @param chn_mode 0: Modbus RTU, 1: Raw RS485, 2, torque sensor
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Set the mode for specified RS485 channel.
+	*
+	* @param chn_id Channel id. 0 for RS485H, channel 1; 1 for RS485L, channel 2.
+	* @param chn_mode Mode to indicate the usage of RS485 channel. 0 for Modbus RTU, 1 for Raw RS485, 2 for torque sensor.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t set_rs485_chn_mode(int chn_id, int chn_mode);
 
 	/**
-	* @brief RS485通讯模式查询
-	* @param chn_id 输入参数 0: RS485H, channel 1; 1: RS485L, channel 2
-	* @param chn_mode 输出参数  0: Modbus RTU, 1: Raw RS485, 2, torque sensor
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get the mode of specified RS485 channel.
+	* 
+	* @param chn_id Channel id. 0: RS485H, channel 1; 1: RS485L, channel 2
+	* @param chn_mode Pointer for the returned mode. 0: Modbus RTU, 1: Raw RS485, 2, torque sensor.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_rs485_chn_mode(int chn_id, int* chn_mode);
 
+///@}
+
+///@name Trajectory recording & replay
+///@{
+
 	/**
-	* @brief 与控制器建立ftp链接
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Set trajectory recording parameters for the cobot.
+	*
+	* @param para Trajectory recording parameters.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_traj_config(const TrajTrackPara *para);
+
+	/**
+	* @brief Get trajectory recording parameters of the cobot.
+	*
+	* @param para Pointer for the returned trajectory recording parameters.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_traj_config(TrajTrackPara *para);
+
+	/**
+	* @brief Acquisition track reproduction data control switch
+	*
+	* @param mode Trajectory recording (sampling) mode. TRUE to start trajectory recording (sampling) and FALSE to disable.
+	* @param filename File name	to save the trajectory recording results.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_traj_sample_mode(const BOOL mode, char *filename);
+
+	/**
+	* @brief Get current trajectory recording status of the cobot.
+	*
+	* @param mode Pointer for the returned status.TRUE if it's now recording, FALSE if the data recording is over or not recording. 
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_traj_sample_status(BOOL *sample_status);
+
+	/**
+	* @brief Get all the existing trajectory recordings of the cobot.
+	*
+	* @param filename  Pointer for the returned trajectory recording files.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_exist_traj_file_name(MultStrStorType *filename);
+
+	/**
+	* @brief Rename the specified trajectory recording file.
+	*
+	* @param src Source file name of the trajectory recording.
+	* @param dest Dest file name of the trajectory recording, the length must be no more than 100 characters.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t rename_traj_file_name(const char *src, const char *dest);
+
+	/**
+	* @brief Delete the specified trajectory file.
+	*
+	* @param filename File name of the trajectory recording.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t remove_traj_file(const char *filename);
+
+	/**
+	* @brief  Generate program scripts from specified trajectory recording file.
+	*
+	* @param filename Trajectory recording file.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t generate_traj_exe_file(const char *filename);
+
+///@}
+
+///@name servo part
+///@{
+	/**
+	* @brief Enable or disable servo mode for the cobot.
+	*
+	* @param enable Option to enable or disable the mode. TRUE to enable servo mode，FALSE to disable servo mode.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_move_enable(BOOL enable);
+
+	/**
+	 * @brief Check if the cobot is now in servo move mode.
+	 *
+	 * @param is_servo Pointer for the returned result.
+	 *
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	 */
+	errno_t is_in_servomove(BOOL *in_servo);
+
+	/**
+	* @brief Move the cobot to the specifed joint position in servo mode. It will only work when the cobot is already in servo 
+	* move mode. The servo_j command will be processed within one interpolation cycle. To ensure the cobot moves smoothly, 
+	* client should send next command immediately to avoid any time delay.
+	*
+	* @param joint_pos The target position of the robot joint motion.
+	* @param move_mode Specify the motion mode: incremental or absolute.
+	* @param step_num times the period, servo_j movement period for step_num * 8ms, where step_num> = 1
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_j(const JointValue *joint_pos, MoveMode move_mode, unsigned int step_num = 1);
+
+	/**
+	* @brief Move the cobot to the specifed Cartesian position in servo mode. Simalar with servo_j command, it will only 
+	* work when the cobot is already in servo move mode and will be processed within one interpolation cycle. To ensure 
+	* the cobot moves smoothly, client should send next command immediately to avoid any time delay.
+	*
+	* @param cartesian_pose The target position of the robot's Cartesian motion.
+	* @param move_mode Specify the motion mode: incremental or absolute.
+	* @param step_num times the period, servo_p movement period is step_num * 8ms, where step_num>=1
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_p(const CartesianPose *cartesian_pose, MoveMode move_mode, unsigned int step_num = 1);
+	
+	/**
+	* @brief Disable the filter for servo move commands.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_move_use_none_filter();
+
+	/**
+	* @brief Set 1st-order low-pass filter for servo move. It will take effect for both servo_j and servo_p commands.
+	*
+	* @param cutoffFreq Cut-off frequency for low-pass filter.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_move_use_joint_LPF(double cutoffFreq);
+
+	/**
+	* @brief Set 3rd-order non-linear filter in joint space for servo move. It will take effect for both servo_j and 
+	* servo_p commands.
+	*
+	* @param max_vr Joint speed limit, in unit deg/s
+	* @param max_ar Joint acceleration limit, in unit deg/s^2
+	* @param max_jr Joint jerk limit, in unit deg/s^3	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_move_use_joint_NLF(double max_vr, double max_ar, double max_jr);
+
+	/**
+	* @brief Set 3rd-order non-linear filter in Cartesian space for servo move. It will only take effect for servo_p
+	* since the filter will be applied to Cartesian position in the commands.
+	*
+	* @param max_vp Speed limit, in unit mm/s.s
+	* @param max_ap Acceleration limit, in unit mm/s^2.
+	* @param max_jp Jerk limit, in unit mm/s^3.
+	* @param max_vr Orientation speed limit, in unit deg/s.
+	* @param max_ar Orientation acceleration limit, in unit deg/s^2.
+	* @param max_jr Orientation jerk limit, in unit deg/s^3.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_move_use_carte_NLF(double max_vp, double max_ap, double max_jp, double max_vr, double max_ar, double max_jr);
+
+	/**
+	* @brief Set multi-order mean filter in joint space for servo move. It will take effect for both servo_j and servo_p
+	* commands.
+	*
+	* @param max_buf Indicates the size of the mean filter buffer. If the filter buffer is set too small (less than 3), it
+	* is likely to cause planning failure. The buffer value should not be too large (>100), which will bring computational
+	* burden to the controller and cause planning delay; as the buffer value increases, the planning delay time increases.
+	* @param kp Position filter coefficient.
+	* @param kv Velocity filter coefficient.
+	* @param ka Acceleration filter coefficient.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_move_use_joint_MMF(int max_buf, double kp, double kv, double ka);
+
+	/**
+	* @brief Set velocity look-ahead filter. It’s an extended version based on the multi-order filtering algorithm with 
+	* look-ahead algorithm, which can be used for joints data and Cartesian data.
+	* 
+	* @param max_buf Buffer size of the mean filter. A larger buffer results in smoother results, but with higher precision
+	* loss and longer planning lag time.
+	* @param kp Position filter coefficient. Reducing this coefficient will result in a smoother filtering effect, but a 
+	* greater loss in position accuracy. Increasing this coefficient will result in a faster response and higher accuracy,
+	* but there may be problems with unstable operation/jitter, especially when the original data has a lot of noise.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t servo_speed_foresight(int max_buf, double kp);
+
+///@}
+
+///@name IO part
+///@{
+	/**
+	* @brief Set the value of a digital output (DO).
+	*
+	* @param type DO type
+	* @param index DO index
+	* @param value DO set value
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_digital_output(IOType type, int index, BOOL value);
+
+	/**
+	* @brief Set the value of the analog output (AO).
+	*
+	* @param type AO type.
+	* @param index AO index.
+	* @param value AO set value.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_analog_output(IOType type, int index, float value);
+
+	/**
+	* @brief Query Digital Input (DI) Status.
+	*
+	* @param type DI type.
+	* @param index DI index.
+	* @param result DI status query result.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_digital_input(IOType type, int index, BOOL *result);
+
+	/**
+	* @brief Query digital output (DO) status.
+	*
+	* @param type DO type.
+	* @param index DO index.
+	* @param result DO status query result.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_digital_output(IOType type, int index, BOOL *result);
+
+	/**
+	* @brief Get the value of the analog input (AI).
+	*
+	* @param type The type of AI.
+	* @param index AI index.
+	* @param result Specify the result of AI status query.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_analog_input(IOType type, int index, float *result);
+
+	/**
+	* @brief Get the value of analog output (AO).
+	*
+	* @param type The type of AO.
+	* @param index AO index.
+	* @param result Specify the result of AO status query.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_analog_output(IOType type, int index, float *result);
+
+	/**
+	* @brief Set multiple digital outputs (DO), specified number of DOs starting from certain index will be set.
+	*
+	* @param type Type of the digital output.
+	* @param index Starting index of the digital outputs to be set.
+	* @param value Array of the target value.
+	* @param len Number of DO to be set.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_digital_output(IOType type, int index, BOOL* value, int len);
+
+	/**
+	* @brief Set multiple analog outputs (AO), specified number of AOs starting from certain index will be set.
+	*
+	* @param type Type of the analog output.
+	* @param index Starting index of the analog outputs to be set.
+	* @param value Array of the target value.
+	* @param len Number of AO to be set.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_analog_output(IOType type, int index, float* value, int len);
+
+	/**
+	* @brief Get current status of multiple digital inputs (DI), specified number of DIs starting from certain index will be retrieved.
+	*
+	* @param type Type of the digital input.
+	* @param index Starting index of the digital input.
+	* @param result Pointer for the returned DI status.
+	* @param len Number of DI to be queried.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_digital_input(IOType type, int index, BOOL *result, int len);
+
+	/**
+	* @brief Get current status of multiple digital inputs (DO), specified number of DOs starting from certain index will be retrieved.
+	*
+	* @param type Type of the digital output.
+	* @param index Starting index of the digital outputs.
+	* @param result Pointer for the returned DO status.
+	* @param len Number of DO to be queried.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_digital_output(IOType type, int index, BOOL *result, int len);
+
+	/**
+	* @brief Get current value of multiple analog inputs (AI), specified number of AIs starting from certain index will be retrieved.
+	*
+	* @param type The type of AI
+	* @param index Starting index of the analog inputs.
+	* @param result Pointer for the returned AI status.
+	* @param len Number of AI to be queried.
+
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_analog_input(IOType type, int index, float *result, int len);
+
+	/**
+	* @brief Get the value of analog output variable (AO)
+	*
+	* @param type The type of AO.
+	* @param index Starting index of the analog outputs.
+	* @param result Pointer for the returned AO status.
+	* @param len Number of AO to be queried.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_analog_output(IOType type, int index, float *result, int len);
+
+	/**
+	* @brief Check if the extended IO modules are running.
+	*
+	* @param is_running Pointer for the returned result.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t is_extio_running(BOOL *is_running);
+
+
+///@}
+
+///@name program part
+///@{
+	/**
+	* @brief Start the program for the cobot. It will work only when one program has been loaded.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t program_run();
+
+	/**
+	* @brief Pause the ongoing program for the cobot.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t program_pause();
+
+	/**
+	* @brief Resume the program for the cobot. It will work only when one program is now in paused status.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t program_resume();
+
+	/**
+	* @brief Abort the ongoing tasks of the cobot, the program or any movement will be terminated.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t program_abort();
+
+	/**
+	* @brief Load a program for the cobot.
+	*
+	* @param file The path of the program. For example: A/A.jks, the <file> is "A"
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t program_load(const char *file);
+
+	/**
+	* @brief Get the name of the loaded job program.
+	*
+	* @param file Pointer for the returned loaded program path. For example: A/A.jks, the <file> is "A"
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_loaded_program(char *file);
+
+	/**
+	* @brief Get current execting line. It's the line number of the motion command for the program scripts. For movement 
+	* commands sent via SDK, it's the motion ID defined in the movement.
+	*
+	* @param curr_line The current line number query result.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_current_line(int *curr_line);
+
+	/**
+	* @brief Get the status of the robot's program execution.
+	*
+	* @param status Pointer for the returned program status.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_program_state(ProgramState *status);
+
+	/**
+	* @brief Get the user defined variables.
+	 *
+	 * @param vlist Pointer for the returned list of user defined variables.	
+	 
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	 */
+	errno_t get_user_var(UserVariableList* vlist);
+
+	/**
+	 * @brief Set the specified user defined variable.
+	 *
+	 * @param v Data of the user defined variable to be set, including the ID, value and alias name.	
+	 *
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	 */
+	errno_t set_user_var(UserVariable v);
+
+///@}
+
+///@name Hand-guiding (drag)
+///@{
+	/**
+	* @brief Enable/disable the hand-guiding (drag) mode.
+	*
+	* @param enable TRUE to enter drag and drop mode, FALSE to exit drag and drop mode.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t drag_mode_enable(BOOL enable);
+
+	/**
+	* @brief Check if the cobot is in hand-guiding (drag) mode.
+	*
+	* @param in_drag Pointer for the returned result.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t is_in_drag_mode(BOOL *in_drag);
+///@}
+
+///@name collision part
+///@{
+
+	/**
+	* @brief Check if the cobot is in collision state.
+	*
+	* @param in_collision Pointer for the returned result.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t is_in_collision(BOOL *in_collision);
+
+	/**
+	* @brief Recover the cobot from collision state. It will only take effect when a cobot is in collision state.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t collision_recover();
+
+	/**
+	* @brief Clear error status.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t clear_error();
+
+	/**
+	* @brief Set the collision sensitivity level for the cobot.
+	*
+	* @param level  Collision sensitivity level, which is an integer value that ranges from [0-5]:
+					0: disable collision detect
+					1: collision detection threshold 25N，
+					2: collision detection threshold 50N，
+					3: collision detection threshold 75N，
+					4: collision detection threshold 100N，
+					5: collision detection threshold 125N	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_collision_level(const int level);
+
+	/**
+	* @brief Get current collision sensitivity level of the cobot.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_collision_level(int *level);
+
+
+///@}
+
+///@name math
+///@{
+	/**
+	* @brief Calculate the inverse kinematics for a Cartesian position. It will be calclulated with the current tool, current 
+	* mounting angle, and current user coordinate.
+	*
+	* @param ref_pos Reference joint position for solution selection, the result will be in the same solution space with
+	* the reference joint position. 
+	* @param cartesian_pose Cartesian position to do inverse kinematics calculation.
+	* @param joint_pos Pointer for the returned joint position.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t kine_inverse(const JointValue *ref_pos, const CartesianPose *cartesian_pose, JointValue *joint_pos);
+
+	/**
+	* @brief Calculate the forward kinematics for a joint position. It will be calclulated with the current tool, current 
+	* mounting angle, and current user coordinate.
+	*
+	* @param joint_pos The position of the joint in joint space.
+	* @param cartesian_pose Cartesian space pose calculation result.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t kine_forward(const JointValue *joint_pos, CartesianPose *cartesian_pose);
+
+	/**
+	* @brief Convert an Euler angle in RPY to rotation matrix.
+	*
+	* @param rpy The Euler angle data to be converted.
+	* @param rot_matrix The converted rotation matrix.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t rpy_to_rot_matrix(const Rpy *rpy, RotMatrix *rot_matrix);
+
+	/**
+	* @brief Convert a rotation matrix to Euler angle in RPY
+	*
+	* @param rot_matrix The rotation matrix data to be converted.
+	* @param rpy The result of the converted RPY Euler angles.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t rot_matrix_to_rpy(const RotMatrix *rot_matrix, Rpy *rpy);
+
+	/**
+	* @brief Convert a quaternion to rotation matrix.
+	*
+	* @param quaternion The quaternion data to be converted.
+	* @param rot_matrix Pointer for the returned rotation matrix.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t quaternion_to_rot_matrix(const Quaternion *quaternion, RotMatrix *rot_matrix);
+
+	/**
+	* @brief Conversion of a rotation matrix to quaternions
+	*
+	* @param rot_matrix The rotation matrix to be converted.
+	* @param quaternion Pointer for the returned quaternion.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t rot_matrix_to_quaternion(const RotMatrix *rot_matrix, Quaternion *quaternion);
+
+
+///@}
+
+///@name SDK support
+///@{
+	/**
+	* @brief Set the reaction behavior of the cobot when connection to SDK is lost.
+	*
+	* @param millisecond Timeout of connection loss, unit: ms.
+	* @param mnt Reaction behavior type.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_network_exception_handle(float millisecond, ProcessType mnt);
+
+	/**
+	* @brief Get the version number of SDK.
+	*
+	* @param version Pointer for the returned SDK verion.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_sdk_version(char *version);
+
+	/**
+	* @brief Get the IP address of the control cabinet.
+	*
+	* @param controller_name The controller name.
+	* @param ip_list Controller ip list, controller name for the specific value to return the name of the corresponding controller IP address, controller name is empty, return to the segment class of all the controller IP address
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_controller_ip(char *controller_name, char *ip_list);
+
+	/**
+	* @brief Set the path to the error code file, if you need to use the get_last_error interface you need to set the path to the error code file, if you don't use the get_last_error interface, you don't need to set the interface.
+	*
+	* @param path  File path for the error code.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_errorcode_file_path(char *path);
+
+	/**
+	* @brief Get the last error code of the robot, the last error code will be cleared when clear_error is called.
+	*
+	* @param code Pointer for the returned error code.
+	* 
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_last_error(ErrorCode *code);
+
+	/**
+	* @brief Enable or disable the debug mode for SDK control. If enabled, SDK log may contains more detailed information. 
+	* @deprecated Only useful before SDK 2.1.12
+	*
+	* @param mode Option to enable or disable the debug mode. 1: enable, 0: disable.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_debug_mode(BOOL mode);
+
+	/**
+	* @brief Get the SDK log path.
+	*
+	* @param filepath Pointer for the returned path.
+	* @param size Size of char* buffer
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_SDK_filepath(char* path, int size);
+
+	/**
+	* @brief Set file path for the SDK log.
+	*
+	* @param filepath File path of the log.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_SDK_filepath(const char *filepath);
+
+	/**
+	* @brief get SDK log path.
+	*
+	* @param path Path of SDK log.
+	* @param size Size of char* buffer.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	static errno_t static_Get_SDK_filepath(char* path, int size);
+
+	/**
+	* @brief Set file path for the SDK log.
+	*
+	* @param filepath File path of the log.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	static errno_t static_Set_SDK_filepath(const char *filepath);
+
+
+
+///@}
+
+///@name Torque sensor and force control
+///@{
+
+	/**
+	* @brief Set the type/brand of torque sensor.
+	* 
+	* @param sensor_brand Type/brand of the torque sensor.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_torsenosr_brand(int sensor_brand);
+
+	/**
+	* @brief Get the type/brand of torque sensor.
+	* 
+	* @param sensor_brand  Pointer to the returned torque sensor type/brand.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torsenosr_brand(int *sensor_brand);
+
+	/**
+	* @brief Set mode to turn on or turn off the torque sensor.
+	* 
+	* @param sensor_mode Mode of the torque sensor, 1 to turn on and 0 to turn off the torque sensor.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_torque_sensor_mode(int sensor_mode);
+
+	/**
+	* @brief Set parameters for admittance control of the cobot.
+	* 
+	* @param axis ID of the axis to be controlled, axis with ID 0 to 5 corresponds to x, y, z, Rx, Ry, Rz.
+	* @param opt  Enable flag. 0: disable, 1: enable.
+	* @param ftUser  Force to move the cobot in maximum speed.
+	* @param ftReboundFK  Ability to go back to initial position.
+	* @param ftConstant Set to 0 when operate manually.
+	* @param ftNnormalTrack Set to 0 when operate manually.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_admit_ctrl_config(int axis, int opt, double ftUser, double ftConstant, int ftNnormalTrack, double ftReboundFK);
+
+	/**
+	* @brief Start to identify payload of the torque sensor.
+	* 
+	* @param joint_pos End joint position of the trajectory.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t start_torq_sensor_payload_identify(const JointValue *joint_pos);
+
+	/**
+	* @brief Get the status of torque sensor payload identification
+	*
+	* @param identify_status Pointer of the returned result. 0: done，1: in progress，2: error.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torq_sensor_identify_staus(int *identify_status);
+
+	/**
+	* @brief Get identified payload of the torque sensor.
+	*
+	* @param payload Pointer to the returned identified payload.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torq_sensor_payload_identify_result(PayLoad *payload);
+
+	/**
+	* @brief Set the payload for the torque sensor.
+	*
+	* @param payload Payload of torque sensor.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_torq_sensor_tool_payload(const PayLoad *payload);
+
+	/**
+	* @brief Get current payload of the torque sensor.
+	*
+	* @param payload Pointer to the returned payload.	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torq_sensor_tool_payload(PayLoad *payload);
+
+	/**
+	* @brief Enable or disable the admittance control of the cobot. It will only work when a torque sensor is equiped.
+	*
+	* @param enable_flag Option to indicate enable or disable the admittance control. 1 to enable and 0 to disable
+	* the admittance control.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t enable_admittance_ctrl(const int enable_flag);
+
+	/**
+	* @brief Enable or disable the tool drive. customer may drag robot using torque-sensor
+	* 
+	* @param handle Control handler of the cobot. 
+	* @param enable_flag Option to indicate enable or disable: 1 to enable and 0 to disable
+	* the admittance control.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t enable_tool_drive(const int enable_flag);
+
+	/**
+	* @brief Set tool drive configuration.
+	* 
+	* @param cfg Configuration for the tool drive.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_tool_drive_config(ToolDriveConfig cfg);
+
+	/**
+	* @brief Get current configuration for tool drive.
+	* 
+	* @param cfg Pointer for the returned tool drive configuration.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_tool_drive_config(RobotToolDriveCtrl* cfg);
+
+	/**
+	* @brief Set compliance control type and sensor initialization status.
+	*
+	* @param sensor_compensation Whether to enable sensor compensation, 1 means enable is initialized, 0 means not initialized.
+	* @param compliance_type 0 for not using any kind of compliance control method 1 for constant force compliance control, 2 for speed compliance control
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_compliant_type(int sensor_compensation, int compliance_type);
+
+	/**
+	* @brief Get compliance control type and sensor initialization status.
+	*
+	* @param sensor_compensation Whether to enable sensor compensation, 1 means enable is initialized, 0 means not initialized.
+	* @param compliance_type 0 for not using any kind of compliance control method 1 for constant force compliance control, 2 for speed compliance control
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_compliant_type(int *sensor_compensation, int *compliance_type);
+
+	/**
+	* @brief Get admitrance control configurations.
+	*
+	* @param admit_ctrl_cfg Pointer for the returned admittance control configurations.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_admit_ctrl_config(RobotAdmitCtrl *admit_ctrl_cfg);
+
+	/**
+	* @brief Setup the communication for the torque sensor.
+	*
+	* @param type Commnunication type of the torque sensor, 0: TCP/IP, 1: RS485.
+	* @param ip_addr IP address of the torque sensor. Only for TCP/IP
+	* @param port Port for the torque sensor. only for tcp/ip
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_torque_sensor_comm(const int type, const char *ip_addr, const int port);
+
+	/**
+	* @brief Get the communication settings of the torque sensor.
+	*
+	* @param type Pointer for the returned commnunication type.
+	* @param ip_addr Pointer for the returned IP address.
+	* @param port Pointer for the returned port.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torque_sensor_comm(int *type, char *ip_addr, int *port);
+
+	/**
+	* @brief Set the torque sensor low-pass filter parameter for force control.
+	*
+	* @param torque_sensor_filter Filter parameter, unit：Hz
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_torque_sensor_filter(const float torque_sensor_filter);
+
+	/**
+	* @brief Get the filter parameter of force control.
+	*
+	* @param torque_sensor_filter Pointer for the returned filter parameter, unit：Hz
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torque_sensor_filter(float *torque_sensor_filter);
+
+	/**
+	* @brief Set soft force or torque limit for the torque sensor.
+	*
+	* @param torque_sensor_soft_limit Soft limit, fx/fy/fz is force limit in unit N and tx/ty/tz is torque limit unit：N*m.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_torque_sensor_soft_limit(const FTxyz torque_sensor_soft_limit);
+
+	/**
+	* @brief Get current soft force or torque limit of the torque sensor.
+	*
+	* @param torque_sensor_soft_limit Pointer for the returned soft limits.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torque_sensor_soft_limit(FTxyz *torque_sensor_soft_limit);
+
+	/**
+	* @brief Disabled force control of the coot.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t disable_force_control();
+
+	/**
+	* @brief Set the parameters for velocity complianance control.
+	*
+	* @param vel_cfg Prameters for velocity compliance control.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_vel_compliant_ctrl(const VelCom *vel_cfg);
+
+	/**
+	* @brief Set condition for compliance control.
+	*
+	* @param ft the max force, if over limit, the robot will stop movement
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_compliance_condition(const FTxyz *ft);
+
+
+	/**
+	* @brief Set the coordinate or frame for the force control.
+	*
+	* @param ftFrame Coordinate or frame option. 0: tool frame, 1:world frame.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_ft_ctrl_frame(const int ftFrame);
+
+	/**
+	* @brief Get the coordinate or frame of the force control.
+	*
+	* @param ftFrame Pointer for the returned frame option.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_ft_ctrl_frame(int* ftFrame);
+
+	/**
+	* @brief Get the torque sensor data of specified type.
+	*
+	* @param type Type of the data to be retrieved: 1 for actual feedback,  2 for general data,  3 for real data without gravity and bias.
+	* @param data Pointer for the returned feedback data
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torque_sensor_data(int type, TorqSensorData* data);
+
+	/**
+	 * @brief Trigger sensor zeroing and blocking for 0.5 seconds
+	 *
+	 * @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	 */
+	errno_t zero_end_sensor();
+
+	/**
+	* @brief Get the tool drive mode and state.
+	*
+	* @param enable Pointer for the returned value that indicating if the tool drive mode is enabled or not.
+	* @param state Pointer for the returned value that indicating if current state of tool drive triggers singularity point, speed, joint limit warning.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_tool_drive_state(int* enable, int *state);
+
+	/**
+	* @brief Get coordinate system for tool drive.
+	*
+	* @param ftFrame Pointer for the return coordinate system, 0 for tool coordinate and 1 for world coordinate.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_tool_drive_frame(FTFrameType *ftFrame);
+
+	/**
+	* @brief Set the the coordinate system for tool drive.
+	*
+	* @param ftFrame Coordinate system option for tool drive, 0 for tool coordinate and 1 for world coordinate.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_tool_drive_frame(FTFrameType ftFrame);
+
+	/**
+	* @brief Get the sensitivity setting for fusion drive.
+	*
+	* @param level Pointer for the returned sensitivity level,which ranges within [0,5] and 0 means off.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_fusion_drive_sensitivity_level(int *level);
+
+	/**
+	* @brief Set the sensitivity level for the fusion drive.
+	*
+	* @param level Sensitivity level, which ranges within [0,5] and 0 means off.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_fusion_drive_sensitivity_level(int level);
+
+	/**
+	* @brief Get the warning range of motion limit (singularity point and joint limit)
+	*
+	* @param range_level Range level, 1-5
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_motion_limit_warning_range(int *warningRange);
+
+	/**
+	* @brief Set the warning range for motion limit, like singularity point and joint limit.
+	*
+	* @param range_level Range level, 1-5.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_motion_limit_warning_range(int warningRange);
+
+	/**
+	* @brief Get force control speed limit.
+	*
+	* @param vel Line speed limit, mm/s.
+	* @param angularVel Angular velocity limit, rad/s	
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_compliant_speed_limit(double* vel, double* angularVel);
+
+	/**
+	* @brief Set force control speed limit.
+	*
+	* @param speed_limit Line speed limit, mm/s.
+	* @param angular_speed_limit Angular velocity limit, rad/s.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_compliant_speed_limit(double vel, double angularVel);
+
+	/**
+	* @brief Get the torque reference center.
+	*
+	* @param ref_point 0 represents the sensor center, 1 represents TCP
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_torque_ref_point(int *refPoint);
+
+	/**
+	* @brief Set the torque reference center.
+	*
+	* @param ref_point 0 represents the sensor center, 1 represents TCP
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_torque_ref_point(int refPoint);
+
+	/**
+	* @brief Get sensor sensitivity.
+	*
+	* @param threshold Torque or force threshold for each axis, ranging within [0, 1]. The larger the value, the less sensitive the sensor.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t get_end_sensor_sensitivity_threshold(FTxyz *threshold);
+
+	/**
+	* @brief Set the sensor sensitivity.
+	*
+	* @param threshold for each axis, 0~1, the larger the value, the less sensitive the sensor
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
+	*/
+	errno_t set_end_sensor_sensitivity_threshold(FTxyz threshold);
+
+///@}
+
+///@name FTP part
+///@{
+	/**
+	* @brief Establish ftp connection with controller.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t init_ftp_client();
 
 	/**
-	* @brief 与控制器建立加密ftp链接(需要app登录且控制器版本支持)
-	* @param password 机器人登陆密码
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Establish an encrypted ftp connection with the controller (requires app login and controller version support)
+	*
+	* @param password Robot login password
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t init_ftp_client_with_ssl(char* password);
 
 	/**
-	* @brief 断开与控制器ftp链接
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Disconnect ftp from controller
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t close_ftp_client();
 	/**
-	* @brief 从控制器下载指定类型和名称的文件到本地
-	* @param remote 控制器内部文件名绝对路径
-	* @param local 下载到本地文件名绝对路径
-	* @param opt 1单个文件 2文件夹
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Download a file of the specified type and name from the controller to the local
+	*
+	* @param remote The absolute path to the file name inside the controller.
+	* @param local The absolute path to the file name to be downloaded locally.
+	* @param opt 1 single file 2 folder
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t download_file(char* local, char* remote, int opt);
 
 	/**
-	* @brief 从控制器上传指定类型和名称的文件到本地
-	* @param remote 上传到控制器内部文件名绝对路径
-	* @param local 本地文件名绝对路径
-	* @param opt 1单个文件 2文件夹
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Upload a file of a specified type and name from the controller to the local
+	*
+	* @param remote Absolute path of the file name to be uploaded inside the controller.
+	* @param local Absolute path to local file name.
+	* @param opt 1 single file 2 folder
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t upload_file(char* local, char* remote, int opt);
 
 
 	/**
-	* @brief 从控制器删除指定类型和名称的文件
-	* @param remote 控制器内部文件名
-	* @param opt 1单个文件 2文件夹
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Delete a file of the specified type and name from the controller.
+	*
+	* @param remote Controller internal file name
+	* @param opt 1 single file 2 folder
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t del_ftp_file(char* remote, int opt);
 
 	/**
-	* @brief 重命名控制器指定类型和名称的文件
-	* @param remote 控制器内部文件名原名称
-	* @param des 重命名的目标名
-	* @param opt 1单个文件 2文件夹
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Rename a file of the type and name specified by the controller.
+	*
+	* @param remote Original name of the controller's internal file name
+	* @param des The target name to rename.
+	* @param opt 1 single file 2 folder
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t rename_ftp_file(char* remote, char* des, int opt);
 
 	/**
-	* @brief 查询控制器目录
-	* @param remotedir 控制器内部文件夹名称
-	* @param type 0文件和文件夹 1文件 2文件夹
-	* @param ret 查询结果
-	* @return ERR_SUCC 成功 其他失败
+	* @brief Get the directory of the FTP service. 
+	*
+	* @param remotedir Pointer for the returned FIP directory. like "/track/" or "/program/"
+	* @param type Type of the file. 0: file and folder, 1: single file, 2: folder
+	* @param ret Returned structure of the directory in string format.
+	*
+	* @return Indicate the status of operation. ERR_SUCC for success and other for failure.
 	*/
 	errno_t get_ftp_dir(const char* remotedir, int type, char* ret);
+///@}
 
 	~JAKAZuRobot();
-
-	
 
 private:
 	class BIFClass;
