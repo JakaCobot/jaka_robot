@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     ROS_INFO("bbq3");
     for (int i = 0; i <6; i++)
     {
-        srv.request.pose.push_back(atof(argv[i]));
+        srv.request.pose.push_back(atof(argv[i+1]));
     }
     // srv.request.pose[0] = -376.0;
     // ROS_INFO("bbq4");
