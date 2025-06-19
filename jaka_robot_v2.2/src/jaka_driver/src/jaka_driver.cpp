@@ -3,6 +3,8 @@
 #include "std_srvs/Empty.h"
 #include "std_srvs/SetBool.h"
 #include "geometry_msgs/TwistStamped.h"
+#include <geometry_msgs/PoseStamped.h>
+#include <tf2/LinearMath/Quaternion.h>
 #include "sensor_msgs/JointState.h"
 
 #include "Eigen/Dense"
@@ -669,7 +671,7 @@ bool clear_error_callback(jaka_msgs::ClearError::Request &request,
     return true;
 }
 */
-
+/*
 void tool_position_callback(ros::Publisher tool_position_pub)
 {
     geometry_msgs::TwistStamped  tool_position;
@@ -710,7 +712,31 @@ void tool_position_callback(ros::Publisher tool_position_pub)
     tool_position.header.stamp = ros::Time::now();
     tool_position_pub.publish(tool_position);
 }
-
+*/
+void tool_position_callback(ros::Publisher tool_position_pub)
+{
+    geometry_msgs::PoseStamped tool_position;
+    RobotStatus robotstatus;
+    RotMatrix rot;
+    Rpy rpy;
+    
+    robot.get_robot_status(&robotstatus);
+    tool_position.pose.position.x = robotstatus.cartesiantran_position[0];
+    tool_position.pose.position.y = robotstatus.cartesiantran_position[1];
+    tool_position.pose.position.z = robotstatus.cartesiantran_position[2];
+    rpy.rx = robotstatus.cartesiantran_position[3];
+    rpy.ry = robotstatus.cartesiantran_position[4];
+    rpy.rz = robotstatus.cartesiantran_position[5];
+    tf2::Quaternion q;
+    q.setRPY(rpy.rx, rpy.ry, rpy.rz);
+    tool_position.pose.orientation.x = q.x();
+    tool_position.pose.orientation.y = q.y();
+    tool_position.pose.orientation.z = q.z();
+    tool_position.pose.orientation.w = q.w();
+    tool_position.header.stamp = ros::Time::now();
+    tool_position.header.frame_id = "base_link"; 
+    tool_position_pub.publish(tool_position);
+}
 void joint_position_callback(ros::Publisher joint_position_pub)
 {
     sensor_msgs::JointState joint_position;
@@ -897,7 +923,8 @@ int main(int argc, char *argv[])
    // ros::Publisher robot_state_pub = nh.advertise<jaka_msgs::RobotMsg>("/jaka_driver/robot_states", 10);
 
     //3.1 End position pose status information reporting
-   tool_position_pub = nh.advertise<geometry_msgs::TwistStamped>("/jaka_driver/tool_position", 10);
+//    tool_position_pub = nh.advertise<geometry_msgs::TwistStamped>("/jaka_driver/tool_position", 10);
+   tool_position_pub = nh.advertise<geometry_msgs::PoseStamped>("/jaka_driver/tool_position", 10);
     //3.2 Joint status information reporting
     joint_position_pub = nh.advertise<sensor_msgs::JointState>("/jaka_driver/joint_position", 10);
     //3.3 Report robot event status information
@@ -913,9 +940,9 @@ int main(int argc, char *argv[])
     
     while(ros::ok())
     {   
-        // tool_position_callback(tool_position_pub);
-        // joint_position_callback(joint_position_pub);
-        // robot_states_callback(robot_state_pub);
+        tool_position_callback(tool_position_pub);
+        joint_position_callback(joint_position_pub);
+        robot_states_callback(robot_state_pub);
         rate.sleep();
         ros::spinOnce();
     }
